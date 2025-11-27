@@ -1,4 +1,4 @@
-![KumbiaPHP logo](https://raw.githubusercontent.com/KumbiaPHP/KumbiaPHP/master/default/public/img/kumbiaphp.svg?sanitize=true)
+![KumbiaPHP ロゴ](https://raw.githubusercontent.com/KumbiaPHP/KumbiaPHP/master/default/public/img/kumbiaphp.svg?sanitize=true)
 
 [![PHPUnit](https://github.com/KumbiaPHP/KumbiaPHP/actions/workflows/phpunit.yml/badge.svg)](https://github.com/KumbiaPHP/KumbiaPHP/actions/workflows/phpunit.yml)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KumbiaPHP/KumbiaPHP/badges/quality-score.png)](https://scrutinizer-ci.com/g/KumbiaPHP/KumbiaPHP)
@@ -6,44 +6,49 @@
 [![Slack](https://slack.kumbiaphp.com/badge.svg)](https://slack.kumbiaphp.com)
 ![PHP8 ready](/default/public/img/php8.svg?sanitize=true)
 
-Español | [English](README.EN.md)
+スペイン語 | [English](README.EN.md)
 
-Fácil, rápido y en español
-(Or should I say fast and easy?)
+かんたん・高速、そしてスペイン語のドキュメント
+（それとも “fast and easy” と言うべきでしょうか？）
 
 ---
-## Bienvenidos a KumbiaPHP Framework  Versión 1
 
-Manual en construcción de la v1:
+## KumbiaPHP Framework バージョン 1 へようこそ
 
-Español: https://github.com/KumbiaPHP/Documentation/tree/master/es
+v1 用マニュアル（作成中）:
 
-English: https://github.com/KumbiaPHP/Documentation/tree/master/en
+スペイン語: https://github.com/KumbiaPHP/Documentation/tree/master/es
 
-Ayúdanos a traducir el manual al inglés: https://translate.kumbiaphp.com
+英語: https://github.com/KumbiaPHP/Documentation/tree/master/en
 
-## Slack KumbiaPHP Channel in spanish and english
-https://slack.kumbiaphp.com (new)
+英語マニュアルの翻訳に協力してください: https://translate.kumbiaphp.com
 
-## Framework PHP más rápido según benchmark independiente
+## KumbiaPHP の Slack チャンネル（スペイン語・英語）
+
+https://slack.kumbiaphp.com（新しい公式 Slack）
+
+## 独立ベンチマークで最速クラスと評価された PHP フレームワーク
+
 https://www.techempower.com/benchmarks/#section=data-r18&hw=ph&test=fortune&l=zik073-f&w=0-jz6rk-0&c=4
 
-## Change Log
-* v1.2 necesita mínimo PHP 8.0
-* Hasta la v1.1.5 requiere PHP 5.4 como mínimo, recomendado 7.x o 8.x
-* CRUD: https://wiki.kumbiaphp.com/V1.0_CRUD_en_KumbiaPHP_Framework
+## 変更履歴（Change Log）
 
-Comunidad
-===
-* https://www.kumbiaphp.com  Web oficial  (pronto en KumbiaPHP https://proto.kumbiaphp.com, bienvenida ayuda con el diseño).
-* https://wiki.kumbiaphp.com Wiki
-* https://foro.kumbiaphp.com Foro de KumbiaPHP
-* https://groups.google.com/group/kumbia/   Grupo de KumbiaPHP +1.500 programadores
-* https://twitter.com/KumbiaPHP Twitter
-* https://www.facebook.com/kumbia.fw/ Facebook page
-* https://slack.kumbiaphp.com  Slack (nuevo y recomendado)
-* Largo historial de repos durante estos años ;)  cvs(sf.net), svn(sf.net), bzr(launchpad.com) y ahora git(github.com)
+-   v1.2 は PHP 8.0 以上が必須です
+-   v1.1.5 までは PHP 5.4 以上が必要（推奨: PHP 7.x または 8.x）
+-   CRUD 解説: https://wiki.kumbiaphp.com/V1.0_CRUD_en_KumbiaPHP_Framework
 
-Licencia
-===
+# コミュニティ
+
+-   https://www.kumbiaphp.com 公式サイト
+    （まもなく KumbiaPHP 製サイト https://proto.kumbiaphp.com に移行予定。デザインへの協力歓迎）
+-   https://wiki.kumbiaphp.com Wiki
+-   https://foro.kumbiaphp.com KumbiaPHP フォーラム
+-   https://groups.google.com/group/kumbia/ KumbiaPHP グループ（1,500 人以上のプログラマ）
+-   https://twitter.com/KumbiaPHP Twitter
+-   https://www.facebook.com/kumbia.fw/ Facebook ページ
+-   https://slack.kumbiaphp.com Slack（新しく推奨のチャネル）
+-   これまでに、cvs(sf.net)、svn(sf.net)、bzr(launchpad.com)、そして現在の git(github.com) と、長いリポジトリの歴史があります
+
+# ライセンス
+
 BSD-3-Clause https://opensource.org/licenses/BSD-3-Clause
