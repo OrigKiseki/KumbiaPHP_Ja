@@ -6,7 +6,7 @@
 [![Slack](https://slack.kumbiaphp.com/badge.svg)](https://slack.kumbiaphp.com)
 ![PHP8 ready](/default/public/img/php8.svg?sanitize=true)
 
-スペイン語 | [English](README.EN.md)
+日本語 | [スペイン語](README.SP.md) | [English](README.EN.md)
 
 かんたん・高速、そしてスペイン語のドキュメント
 （それとも “fast and easy” と言うべきでしょうか？）
