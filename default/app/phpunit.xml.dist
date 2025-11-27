@@ -10,16 +10,15 @@
         <ini name="apc.enable_cli" value="1"/>
     </php>
 
-    <!-- Add any additional test suites you want to run here -->
+    <!-- ここに追加で実行したいテストスイートを定義できます -->
     <testsuites>
         <testsuite name="app">
             <directory>./tests</directory>
         </testsuite>
-        <!-- Add more test suites here. -->
+        <!-- 必要に応じて、ここにさらにテストスイートを追加してください -->
     </testsuites>
 
-
-    <!-- Ignore vendor, core and tests in code coverage reports -->
+    <!-- コードカバレッジレポートから vendor, core, tests ディレクトリを除外 -->
     <coverage>
         <exclude>
             <directory suffix=".php">./tests</directory>

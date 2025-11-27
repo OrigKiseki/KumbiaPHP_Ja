@@ -2,10 +2,10 @@
 /**
  * KumbiaPHP web & app Framework
  *
- * LICENSE
+ * ライセンス
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載された
+ * New BSD ライセンスの条件に従います。
  *
  * @category   Kumbia Tests
  * @package    Controller
@@ -17,14 +17,14 @@
 use PHPUnit\Framework\TestCase;
 
 /**
- * PagesControllerTest class
+ * PagesControllerTest クラス
  */
 class PagesControllerTest extends TestCase
 {
     use KumbiaTestTrait;
-    
+
     /**
-     * 
+     * ページ表示のテスト
      *
      * @return void
      */
@@ -35,7 +35,9 @@ class PagesControllerTest extends TestCase
         //$test = $this->get('/pages/show/kumbia/status/');
         $this->assertResponseCode(200);
     }
+
     /**
+     * 存在しないページを表示しようとした場合のテスト
      * expectedException KumbiaException
      */
     //public function testDisplayNoPage()
@@ -46,6 +48,6 @@ class PagesControllerTest extends TestCase
         //$this->assertContains('<h1>Vista "pages/no_page.phtml" no encontrada</h1>', $actual);
         //$this->assertResponseCode(404);
         //$this->expectException(KumbiaException::class);
-        
+
     //}
 }

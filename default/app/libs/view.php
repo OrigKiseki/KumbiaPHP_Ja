@@ -5,7 +5,7 @@
 require_once CORE_PATH . 'kumbia/kumbia_view.php';
 
 /**
- * Esta clase permite extender o modificar la clase ViewBase de Kumbiaphp.
+ * このクラスは、KumbiaPHP の ViewBase クラスを拡張・変更するためのクラスです。
  *
  * @category KumbiaPHP
  * @package View

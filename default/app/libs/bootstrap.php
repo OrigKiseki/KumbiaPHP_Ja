@@ -1,7 +1,6 @@
 <?php
-// Bootstrap de la aplicacion para personalizarlo
-// Para cargar cambia en public/index.php el require del bootstrap a app
+// アプリケーション用ブートストラップ（カスタマイズ用）
+// 読み込むには、public/index.php の require 対象を bootstrap から app に変更します
 
-// Arranca KumbiaPHP
+// KumbiaPHP を起動
 require_once CORE_PATH . 'kumbia/bootstrap.php';
-

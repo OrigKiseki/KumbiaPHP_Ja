@@ -1,45 +1,43 @@
-
-
 /**
- * Default mobile-first, responsive styling for pickadate.js
- * Demo: http://amsul.github.com/pickadate.js/themes.htm#default
+ * pickadate.js 用のモバイルファースト・レスポンシブ標準スタイル
+ * デモ: http://amsul.github.com/pickadate.js/themes.htm#default
  */
 
 /**
- * Colors used:
+ * 使用されている色:
  *
- * #0089ec -> Base blue
- * #b1dcfb -> Hover blue bg
+ * #0089ec -> 基本のブルー
+ * #b1dcfb -> ホバー時のブルー背景
  *
- * #0059bc -> Dark blue for "today" tag
- * #aaa    -> Light grey for "today" tag if disabled
+ * #0059bc -> 「今日」タグ用の濃いブルー
+ * #aaa    -> 「今日」タグが無効なときの薄いグレー
  *
- * #f5f5f5 -> Dimmed grey bg for disabled days
- * #ddd    -> Less dimmed grey for text in disabled & outfocus days
+ * #f5f5f5 -> 無効な日付の薄いグレー背景
+ * #ddd    -> 無効な日やフォーカス外の日付のテキスト用グレー
  *
- * #777    -> Grey for calendar border
- * #888    -> Slightly lighter grey for calendar top border
+ * #777    -> カレンダー枠線用のグレー
+ * #888    -> カレンダートップの枠線用、少し明るいグレー
  *
- * #999    -> Medium grey used for year & weekday labels
+ * #999    -> 年・曜日ラベルに使う中間グレー
  *
- * #e20    -> Red used for "clear" icon
+ * #e20    -> 「クリア」アイコン用の赤
  *
- * #000    -> Black
- * #fff    -> White
+ * #000    -> 黒
+ * #fff    -> 白
  *
  */
 
 
 /**
- * When the calendar is open
+ * カレンダーが開いているとき
  */
 
-/* Prevent the page from scrolling */
+/* ページ全体のスクロールを防ぐ */
 /*body*/.pickadate__active {
     overflow: hidden;
 }
 
-/* And add the "active" state to the input */
+/* 入力欄を「アクティブ」状態の見た目にする */
 /*input*/.pickadate__input--active {
     border-color: #0089ec !important;
 }
@@ -47,11 +45,11 @@
 
 
 /**
- * The holder that fills the entire screen
+ * 画面全体を覆うホルダー
  */
 .pickadate__holder {
 
-    /* The base font-size */
+    /* 基本のフォントサイズ */
     font-size: 16px;
 
     line-height: 1.2;
@@ -63,14 +61,14 @@
     width: 100%;
     height: 100%;
 
-    /* Fade out the background, then immediately hide the holder */
+    /* 背景をフェードアウトさせ、その後すぐにホルダーを隠す */
     -webkit-transition: background .15s ease-out, top 0s .2s;
        -moz-transition: background .15s ease-out, top 0s .2s;
             transition: background .15s ease-out, top 0s .2s;
 }
 
 /**
- * The frame that bounds the calendar
+ * カレンダーを囲むフレーム
  */
 .pickadate__frame {
     min-width: 256px;
@@ -80,18 +78,18 @@
 
     position: absolute;
 
-    /* Allow the frame to be scrolled in case the screen is too small */
+    /* 画面が小さい場合にフレーム内をスクロール可能にする */
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
-    /* Animate the frame in and out of view */
+    /* フレームを表示・非表示にアニメーションさせる */
     -webkit-transition: all .15s ease-out;
        -moz-transition: all .15s ease-out;
             transition: all .15s ease-out;
 }
 
 /**
- * Make the calendar holder and frame fullscreen
+ * カレンダーのホルダーとフレームを全画面に広げる
  */
 .pickadate__holder,
 .pickadate__frame {
@@ -103,24 +101,24 @@
 
 
 /**
- * When the calendar opens
+ * カレンダーが開くとき
  */
 .pickadate__holder--opened {
 
-    /* Show a translucent black background (order is important for IE) */
+    /* 半透明の黒背景を表示する（IE では順序が重要） */
     background: transparent;
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000)"; /* IE8 */
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1E000000,endColorstr=#1E000000); /* IE6 & 7 */
           zoom: 1;
-    background: rgba(0,0,0,.32); /* Normal browsers */
+    background: rgba(0,0,0,.32); /* 通常のブラウザ */
 
-    /* Animate in the background */
+    /* 背景のフェードインをアニメーション */
     -webkit-transition: background .15s ease-out;
        -moz-transition: background .15s ease-out;
             transition: background .15s ease-out;
 }
 
-/* Bring the holder and frame into view */
+/* ホルダーとフレームを画面内へ移動 */
 .pickadate__holder--opened,
 .pickadate__holder--opened .pickadate__frame {
     top: 0;
@@ -130,10 +128,8 @@
 
 
 
-
-
 /**
- * The calendar wrapper
+ * カレンダー全体のラッパー
  */
 .pickadate__wrap {
     display: table;
@@ -142,7 +138,7 @@
 }
 
 /**
- * The calendar itself
+ * カレンダー本体
  */
 .pickadate__calendar {
     display: table-cell;
@@ -154,7 +150,7 @@
 
 
 /**
- * The calendar table of dates
+ * 日付のテーブル
  */
 .pickadate__table {
     text-align: center;
@@ -166,7 +162,7 @@
     margin-top: .5em;
 }
 
-/* Remove browser stylings on a table cell */
+/* ブラウザのデフォルトのセルスタイルをリセット */
 .pickadate__table td {
     margin: 0;
     padding: 0;
@@ -175,7 +171,7 @@
 
 
 /**
- * The header containing the month and year tags/selectors
+ * 月・年のラベル／セレクタを含むヘッダー
  */
 .pickadate__header {
     text-align: center;
@@ -217,7 +213,7 @@
     font-size: .8em;
     border: 1px solid #ccc;
     height: 2.5em;
-    padding: .66em .25em; /* For firefox */
+    padding: .66em .25em; /* Firefox 用の調整 */
     margin-top: -.5em;
 }
 .pickadate__select--month {
@@ -236,7 +232,7 @@
 
 
 /**
- * The weekday labels
+ * 曜日ラベル
  */
 .pickadate__weekday {
     width: 14.285714286%; /* 100/7 */
@@ -248,7 +244,7 @@
 
 
 /**
- * The days on the calendar
+ * カレンダー上の日付
  */
 .pickadate__day {
     padding: .33em 0 .25em;
@@ -258,7 +254,7 @@
 }
 
 /**
- * The various states of a day
+ * 日付のさまざまな状態
  */
 .pickadate__day--today {
     color: #0089ec;
@@ -298,7 +294,7 @@
 
 
 /**
- * The footer containing the "today" and "clear" buttons
+ * 「今日」「クリア」ボタンを含むフッター
  */
 .pickadate__footer {
     text-align: center;
@@ -348,7 +344,7 @@
 
 
 /**
- * The hover effect on any buttons
+ * ボタン類のホバー効果
  */
 .pickadate__day--infocus:hover,
 .pickadate__day--outfocus:hover,
@@ -377,8 +373,8 @@
 
 
 /**
- * Adjust the calendar for not so tiny screens
- * by just increasing the font size a bit
+ * ある程度の高さがある画面では、
+ * フォントサイズを少し大きくする
  */
 @media (min-height: 342px) {
     .pickadate__calendar {
@@ -388,12 +384,12 @@
 
 
 /**
- * For bigger viewports, adjust the calendar
- * to not cover the entire screen
+ * さらに大きなビューポートでは、
+ * カレンダーが画面全体を覆わないように調整
  */
 @media (min-height: 424px) {
 
-    /* Align the frame to the bottom, rather than top */
+    /* フレームを上ではなく下に揃える */
     .pickadate__frame {
         overflow: visible;
         top: auto;
@@ -405,34 +401,34 @@
     }
 
 
-    /* Remove the calendar middle-aligned styling */
+    /* カレンダーの中央寄せスタイルを解除 */
     .pickadate__wrap,
     .pickadate__calendar {
         display: block;
     }
     .pickadate__calendar {
 
-        /* Increase the font size a bit more */
+        /* フォントサイズをさらに少し大きくする */
         font-size: 1.33em;
 
-        /* Add the borders except the bottom one */
+        /* 下以外の枠線を追加 */
         border: 1px solid #777;
         border-top-color: #888;
         border-bottom-width: 0;
 
-        /* Make 'em rounded at the top corners */
+        /* 上側の角を丸くする */
         -webkit-border-radius: 6px 6px 0 0;
            -moz-border-radius: 6px 6px 0 0;
                 border-radius: 6px 6px 0 0;
 
-        /* And finally, add a nice shadow */
+        /* 下に影を追加して浮いているように見せる */
         -webkit-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
            -moz-box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
                 box-shadow: 0 12px 36px 16px rgba(0,0,0,.24);
     }
 
 
-    /* Increase the spacing a tad */
+    /* 余白を少し広げる */
     .pickadate__table {
         margin-top: .75em;
     }
@@ -446,9 +442,9 @@
 
 
 /**
- * For bigger monitors still, move it away
- * from the bottom edge of the screen
- * and round the top and bottom corners.
+ * さらに大きなモニターでは、
+ * 画面下端から少し離し、
+ * 上下の角を丸める
  */
 @media (min-height: 542px) {
 
@@ -461,7 +457,7 @@
         border-bottom-width: 1px;
 
         -webkit-border-radius: 6px;
-           -moz-border-radius: 6px;
-                border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
     }
 }

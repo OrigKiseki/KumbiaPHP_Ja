@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ja">
  <head>
   <meta charset=<?= APP_CHARSET ?> >
-  <title>KumbiaPHP Framework</title>
+  <title>KumbiaPHP フレームワーク</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php Tag::css('kumbia') ?>
   <?= Html::includeCss() ?>
@@ -11,10 +11,10 @@
 <div class="container">
   <header class="row">
       <div class="col-8">
-          <?= Html::link('', Html::img('kumbiaphp.svg', 'KumbiaPHP logo'), 'title="Inicio"') ?>
+          <?= Html::link('', Html::img('kumbiaphp.svg', 'KumbiaPHP ロゴ'), 'title="ホーム"') ?>
       </div>
       <div class="col-4 text-right">
-          App: <strong><?= basename(dirname(APP_PATH)) ?></strong> (<?= PRODUCTION ? 'Production' : 'Development' ?>)
+          アプリケーション: <strong><?= basename(dirname(APP_PATH)) ?></strong> (<?= PRODUCTION ? '本番' : '開発' ?>)
       </div>
   </header>
   <?php View::content() ?>

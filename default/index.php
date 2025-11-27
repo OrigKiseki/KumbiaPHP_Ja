@@ -2,19 +2,18 @@
 /**
  * KumbiaPHP web & app Framework
  *
- * LICENSE
+ * ライセンス
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
+ * このソースファイルは、同梱されている LICENSE.txt に記載された
+ * New BSD ライセンスの条件に従います。
+ * また、以下の URL からも参照できます:
  * http://wiki.kumbiaphp.com/Licencia
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@kumbiaphp.com so we can send you a copy immediately. 
- *  
- * @copyright  Copyright (c) 2005 - 2023 Kumbia Team (http://www.kumbiaphp.com)
+ * もしライセンスのコピーを受け取っておらず、上記 URL からも取得できない場合は、
+ * license@kumbiaphp.com までメールでご連絡ください。折り返しライセンスをお送りします。
+ *
+ * © 2005 - 2023 Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
-// Carga el index.php de public
+// public ディレクトリの index.php を読み込む
 include 'public/index.php';

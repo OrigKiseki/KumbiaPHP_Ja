@@ -1,22 +1,20 @@
 <?php
 /**
- * @see Controller nuevo controller
+ * @see Controller ベースコントローラ
  */
 require_once CORE_PATH . 'kumbia/controller.php';
 
 /**
- * Controlador principal que heredan los controladores
+ * 各コントローラが継承するメインコントローラ
  *
- * Todos las controladores heredan de esta clase en un nivel superior
- * por lo tanto los métodos aquií definidos estan disponibles para
- * cualquier controlador.
+ * すべてのコントローラは上位レベルでこのクラスを継承するため、
+ * ここで定義されたメソッドは任意のコントローラから利用できます。
  *
  * @category Kumbia
  * @package Controller
  */
 abstract class AppController extends Controller
 {
-
     final protected function initialize()
     {
 
@@ -24,7 +22,6 @@ abstract class AppController extends Controller
 
     final protected function finalize()
     {
-        
-    }
 
+    }
 }

@@ -1,33 +1,33 @@
 <?php
 /**
  * KumbiaPHP Web Framework
- * Archivo de rutas (Opcional)
- * 
- * Usa este archivo para definir el enrutamiento estatico entre
- * controladores y sus acciones.Un controlador se puede enrutar a 
- * otro controlador utilizando '*' como comodin así:
- * 
+ * ルート定義ファイル（任意）
+ *
+ * このファイルを使って、コントローラとアクション間の
+ * 静的なルーティングを定義します。
+ * コントローラ同士は、ワイルドカード '*' を使って
+ * 次のようにルーティングできます:
+ *
  * '/controlador1/accion1/valor_id1'  =>  'controlador2/accion2/valor_id2'
- * 
- * Ej:
- * Enrutar cualquier petición a posts/adicionar a posts/insertar/*
+ *
+ * 例:
+ * 任意のリクエスト posts/adicionar を posts/insertar/* へルーティング
  * '/posts/adicionar/*' => 'posts/insertar/*'
- * 
- * Otros ejemplos:
- * 
+ *
+ * その他の例:
+ *
  * '/prueba/ruta1/*' => 'prueba/ruta2/*',
  * '/prueba/ruta2/*' => 'prueba/ruta3/*',
  */
 return [
     'routes' => [
         /**
-         * Muestra la info relacionado con el framework
+         * フレームワークに関する情報を表示
          */
         '/' => 'index/index',
         /**
-         * Status del config.php/config.ini
+         * config.php / config.ini のステータス表示
          */
         '/status' => 'pages/kumbia/status'
-        
-        ],
+    ],
 ];

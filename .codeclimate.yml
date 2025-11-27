@@ -1,5 +1,5 @@
-# Save as .codeclimate.yml (note leading .) in project root directory
-# Excluded deprecated libs
+# プロジェクトのルートディレクトリに .codeclimate.yml（先頭に .）として保存してください
+# 非推奨ライブラリは除外
 languages:
   Ruby: false
   JavaScript: true

@@ -1,48 +1,48 @@
 <?php
 /**
  * KumbiaPHP Web Framework
- * Parámetros de configuracion de la aplicacion
+ * アプリケーションの設定パラメータ
  */
 return [
     'application' => [
         /**
-         * name: es el nombre de la aplicacion
+         * name: アプリケーション名
          */
         'name' => 'KUMBIAPHP PROJECT',
         /**
-         * database: base de datos a utilizar
+         * database: 使用するデータベース接続名
          */
         'database' => 'development',
         /**
-         * dbdate: formato de fecha por defecto de la aplicacion
+         * dbdate: アプリケーションで使用する日付フォーマットのデフォルト値
          */
         'dbdate' => 'YYYY-MM-DD',
         /**
-         * debug: muestra los errores en pantalla (On/off)
+         * debug: 画面上にエラーを表示するかどうか (On/Off)
          */
         'debug' => 'On',
         /**
-         * log_exceptions: muestra las excepciones en pantalla (On/off)
+         * log_exceptions: 例外を画面に表示するかどうか (On/Off)
          */
         'log_exceptions' => 'On',
         /**
-         * cache_template: descomentar para habilitar cache de template
+         * cache_template: テンプレートキャッシュを有効にする場合はコメントを外す
          */
         //'cache_template' => 'On',
         /**
-         * cache_driver: driver para la cache (file, sqlite, memsqlite)
+         * cache_driver: キャッシュで使用するドライバ (file, sqlite, memsqlite)
          */
         'cache_driver' => 'file',
         /**
-         * metadata_lifetime: tiempo de vida de la metadata en cache
+         * metadata_lifetime: キャッシュに保存されたメタデータの有効期間
          */
         'metadata_lifetime' => '+1 year',
         /**
-         * namespace_auth: espacio de nombres por defecto para Auth
+         * namespace_auth: Auth で使用するデフォルトの名前空間
          */
         'namespace_auth' => 'default',
         /**
-         * routes: descomentar para activar routes en routes.php
+         * routes: routes.php のルーティング設定を有効にする場合はコメントを外す
          */
         //'routes' => '1',
     ],

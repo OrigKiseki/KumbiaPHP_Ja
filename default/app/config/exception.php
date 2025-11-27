@@ -1,8 +1,7 @@
 <?php
 
 return [
-    // array de IPs para mostrar la exception de desarrollador 
-    // ej: ['12.12.12.12','23.23.23.23']
+    // 開発者向けの例外情報を表示してよい IP アドレスの配列
+    // 例: ['12.12.12.12', '23.23.23.23']
     'trustedIp' => []
 ];
-

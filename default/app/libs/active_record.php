@@ -2,12 +2,12 @@
 /**
  * @see KumbiaActiveRecord
  */
-require_once CORE_PATH.'libs/kumbia_active_record/kumbia_active_record.php';
+require_once CORE_PATH . 'libs/kumbia_active_record/kumbia_active_record.php';
 
 /**
  * ActiveRecord
  *
- * Clase padre ActiveRecord para añadir tus métodos propios
+ * 独自のメソッドを追加するための ActiveRecord 親クラス
  *
  * @category Kumbia
  * @package Db

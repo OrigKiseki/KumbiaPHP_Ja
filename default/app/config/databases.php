@@ -1,82 +1,82 @@
 <?php
 /**
  * KumbiaPHP Web Framework
- * Parámetros de conexión a la base de datos
+ * データベース接続の設定パラメータ
  */
 return [
     'development' => [
         /**
-         * host: ip o nombre del host de la base de datos
+         * host: データベースサーバーの IP またはホスト名
          */
         'host'     => 'localhost',
         /**
-         * username: usuario con permisos en la base de datos
+         * username: データベースにアクセス権限を持つユーザー名
          */
-        'username' => 'root', //no es recomendable usar el usuario root
+        'username' => 'root', // root ユーザーの使用は推奨されません
         /**
-         * password: clave del usuario de la base de datos
+         * password: データベースユーザーのパスワード
          */
         'password' => '',
         /**
-         * test: nombre de la base de datos
+         * name: データベース名
          */
         'name'     => 'test',
         /**
-         * type: tipo de motor de base de datos (mysql, pgsql, oracle o sqlite)
+         * type: データベースエンジンの種類 (mysql, pgsql, oracle または sqlite)
          */
         'type'     => 'mysql',
         /**
-         * charset: Conjunto de caracteres de conexión, por ejemplo 'utf8'
+         * charset: 接続に使用する文字コード。例: 'utf8'
          */
         'charset'  => 'utf8',
         /**
-         * dsn: Cadena de conexión a la base de datos
+         * dsn: データベースへの接続文字列
          */
         //'dsn' => '',
         /**
-         * pdo: activar conexiones PDO (On/Off); descomentar para usar
+         * pdo: PDO 接続を有効にするかどうか (On/Off)。使用する場合はコメントを外す
          */
         //'pdo' => 'On',
-        ],
+    ],
 
     'production' => [
         /**
-         * host: ip o nombre del host de la base de datos
+         * host: データベースサーバーの IP またはホスト名
          */
         'host'     => 'localhost',
         /**
-         * username: usuario con permisos en la base de datos
+         * username: データベースにアクセス権限を持つユーザー名
          */
-        'username' => 'root', //no es recomendable usar el usuario root
+        'username' => 'root', // root ユーザーの使用は推奨されません
         /**
-         * password: clave del usuario de la base de datos
+         * password: データベースユーザーのパスワード
          */
         'password' => '',
         /**
-         * test: nombre de la base de datos
+         * name: データベース名
          */
         'name'     => 'test',
         /**
-         * type: tipo de motor de base de datos (mysql, pgsql o sqlite)
+         * type: データベースエンジンの種類 (mysql, pgsql または sqlite)
          */
         'type'     => 'mysql',
         /**
-         * charset: Conjunto de caracteres de conexión, por ejemplo 'utf8'
+         * charset: 接続に使用する文字コード。例: 'utf8'
          */
         'charset'  => 'utf8',
         /**
-         * dsn: cadena de conexión a la base de datos
+         * dsn: データベースへの接続文字列
          */
         //'dsn' => '',
         /**
-         * pdo: activar conexiones PDO (OnOff); descomentar para usar
+         * pdo: PDO 接続を有効にするかどうか (On/Off)。使用する場合はコメントを外す
          */
         //'pdo' => 'On',
-        ],
+    ],
 ];
 
 /**
- * Ejemplo de SQLite
+ * SQLite の設定例
  */
 /*'development' => [
     'type' => 'sqlite',

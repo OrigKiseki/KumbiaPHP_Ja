@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Controlador base para la construcción de CRUD para modelos rápidamente
+ * モデル用の CRUD を素早く構築するためのベースコントローラ
  *
  * @category Kumbia
  * @package Controller
  */
 abstract class ScaffoldController extends AdminController
 {
-    /** @var string Carpeta en views/_shared/scaffolds/ */
+    /** @var string views/_shared/scaffolds/ 内のフォルダ名 */
     public string $scaffold = 'kumbia';
-    /** @var string Nombre del modelo en CamelCase */
+    /** @var string CamelCase でのモデル名 */
     public string $model = '';
 
     /**
-     * Resultados paginados
-     * 
-     * @param int $page  Página a mostrar
+     * ページネーションされた結果を表示
+     *
+     * @param int $page 表示するページ番号
      */
     public function index($page = 1)
     {
@@ -24,42 +24,42 @@ abstract class ScaffoldController extends AdminController
     }
 
     /**
-     * Crea un Registro
+     * レコードを作成
      */
     public function crear()
     {
         if (Input::hasPost($this->model)) {
 
             $obj = new $this->model;
-            //En caso que falle la operación de guardar
+            // 保存処理が失敗した場合
             if (!$obj->save(Input::post($this->model))) {
-                Flash::error('Falló Operación');
-                //se hacen persistente los datos en el formulario
+                Flash::error('処理に失敗しました');
+                // フォームに入力された値を保持する
                 $this->{$this->model} = $obj;
                 return;
             }
             Redirect::to();
             return;
         }
-        // Sólo es necesario para el autoForm
+        // autoForm 用にのみ必要
         $this->{$this->model} = new $this->model;
     }
 
     /**
-     * Edita un Registro
-     * 
-     * @param int $id  Idendificador del registro
+     * レコードを編集
+     *
+     * @param int $id レコードの識別子
      */
     public function editar($id)
     {
         View::select('crear');
 
-        //se verifica si se ha enviado via POST los datos
+        // POST でデータが送信されたかを確認
         if (Input::hasPost($this->model)) {
             $obj = new $this->model;
             if (!$obj->update(Input::post($this->model))) {
-                Flash::error('Falló Operación');
-                //se hacen persistente los datos en el formulario
+                Flash::error('処理に失敗しました');
+                // フォームに入力された値を保持する
                 $this->{$this->model} = Input::post($this->model);
             } else {
                 Redirect::to();
@@ -67,28 +67,28 @@ abstract class ScaffoldController extends AdminController
             }
         }
 
-        //Aplicando la autocarga de objeto, para comenzar la edición
+        // 編集開始のためにオブジェクトの自動読み込みを適用
         $this->{$this->model} = (new $this->model)->find((int) $id);
     }
 
     /**
-     * Borra un Registro
-     * 
-     * @param int $id Identificador de registro
+     * レコードを削除
+     *
+     * @param int $id レコードの識別子
      */
     public function borrar($id)
     {
         if (!(new $this->model)->delete((int) $id)) {
-            Flash::error('Falló Operación');
+            Flash::error('処理に失敗しました');
         }
-        //enrutando al index para listar los articulos
+        // 一覧表示のため index へリダイレクト
         Redirect::to();
     }
 
     /**
-     * Ver un Registro
-     * 
-     * @param int $id Identificador de registro
+     * レコードを表示
+     *
+     * @param int $id レコードの識別子
      */
     public function ver($id)
     {
