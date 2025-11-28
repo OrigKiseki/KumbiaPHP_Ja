@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Core
@@ -15,18 +15,17 @@
  */
 
 /**
- * Kumbia Version
+ * Kumbia のバージョン情報
  *
  * @category   Kumbia
  * @package    Core
  */
-
 const KUMBIA_VERSION = '1.2.1';
 
 /**
- * Versión de KumbiaPHP
- * 
- * @deprecated 1.1  Use constant KUMBIA_VERSION
+ * KumbiaPHP のバージョンを返す
+ *
+ * @deprecated 1.1 以降は KUMBIA_VERSION 定数を使用してください
  * @return string
  */
 function kumbia_version()

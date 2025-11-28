@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  *
@@ -15,12 +15,12 @@
 require_once __DIR__.'/controller.php';
 
 /**
- * Controlador para manejar peticiones REST.
+ * REST リクエストを扱うためのコントローラクラス
  *
- * Por defecto cada acción se llama como el método usado por el cliente
- * (GET, POST, PUT, DELETE, OPTIONS, HEADERS, PURGE...)
- * ademas se puede añadir mas acciones colocando delante el nombre del método
- * seguido del nombre de la acción put_cancel, post_reset...
+ * 通常、各アクション名はクライアントが使用した HTTP メソッド名
+ * （GET, POST, PUT, DELETE, OPTIONS, HEADERS, PURGE...）と対応します。
+ * さらに、put_cancel, post_reset のように
+ * 「メソッド名_アクション名」という形式でアクションを追加することもできます。
  *
  * @category Kumbia
  *
@@ -29,18 +29,18 @@ require_once __DIR__.'/controller.php';
 abstract class KumbiaRest extends Controller
 {
     /**
-     * Formato de entrada usado para interpretar los datos
-     * enviados por el cliente.
+     * クライアントから送信されたデータを解釈するための入力フォーマット
      *
-     * @var string MIME Type del formato
+     * @var string フォーマットの MIME タイプ
      */
     protected $_inputFormat;
 
     /**
-     * Permite definir parser personalizados por MIME TYPE
-     * Esto es necesario para interpretar las entradas
-     * Se define como un MIME type como clave y el valor debe ser un
-     * callback que devuelva los datos interpretado.
+     * MIME タイプ毎にカスタムパーサを定義する配列
+     *
+     * ここで定義されたパーサを使ってリクエストボディを解釈します。
+     * キーに MIME タイプ、値にパースを行うコールバックを指定します。
+     * コールバックは「解釈済みデータ」を返す必要があります。
      */
     protected $_inputType = [
         'application/json' => [self::class, 'parseJSON'],
@@ -51,16 +51,18 @@ abstract class KumbiaRest extends Controller
     ];
 
     /**
-     * Formato de salida enviada al cliente.
+     * クライアントへ返却する出力フォーマット
      *
-     * @var string nombre del template a usar
+     * @var string 使用するテンプレート名
      */
     protected $_outputFormat;
 
     /**
-     * Permite definir las salidas disponibles,
-     * de esta manera se puede presentar la misma salida en distintos
-     * formatos a requerimientos del cliente.
+     * 利用可能な出力形式の定義
+     *
+     * 同じレスポンスを、クライアントの要求に応じて
+     * 異なるフォーマットで返すことができます。
+     * キーに MIME タイプ、値にテンプレート名（フォーマット名）を指定します。
      */
     protected $_outputType = [
         'application/json' => 'json',
@@ -70,9 +72,9 @@ abstract class KumbiaRest extends Controller
     ];
 
     /**
-     * Constructor
+     * コンストラクタ
      *
-     * @param array $arg
+     * @param array $arg ルーターから渡されるパラメータ
      */
     public function __construct($arg)
     {
@@ -81,26 +83,32 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * Hacer el router de la petición y envia los parametros correspondientes
-     * a la acción, adema captura formatos de entrada y salida. 
+     * REST 用の初期設定を行う
+     *
+     * ルーティングされた情報を元に、入力・出力フォーマットを決定し、
+     * 使用するビュー（テンプレート）やアクション名を書き換えます。
      */
     protected function initREST()
     {
-        /* formato de entrada */
+        /* 入力フォーマットを決定 */
         $this->_inputFormat = self::getInputFormat();
+        /* 出力フォーマットを決定 */
         $this->_outputFormat = self::getOutputFormat($this->_outputType);
         View::select(null, $this->_outputFormat);
         $this->rewriteActionName();
     }
 
     /**
-     * Reescribe la acción.
+     * アクション名を書き換える
+     *
+     * HTTP メソッドに応じて、実際に呼び出すアクション名を変換します。
      */
     protected function rewriteActionName()
     {
         /**
-         * reescribimos la acción a ejecutar, ahora será el método de
-         * la petición: get(:id), getAll , put, post, delete, etc.
+         * 実行されるアクション名を書き換える。
+         * これにより、実際には HTTP メソッド名がアクションとして呼ばれます。
+         * 例: get(:id), getAll, put, post, delete など。
          */
         $action = $this->action_name;
         $method = strtolower(Router::get('method'));
@@ -116,13 +124,14 @@ abstract class KumbiaRest extends Controller
             return;
         }
         $this->action_name = $method;
+        // index 以外のアクション名はパラメータとして引き渡す
         $this->parameters = ($action === 'index') ? $this->parameters : [$action] + $this->parameters;
     }
 
     /**
-     * Verifica si existe la acción $name existe.
+     * 指定されたアクション $name が存在するか確認する
      *
-     * @param string $name nombre de la acción
+     * @param string $name アクション名
      *
      * @return bool
      */
@@ -136,14 +145,17 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * Retorna los parámetros de la petición el función del formato de entrada
-     * de los mismos. Hace uso de los parser definidos en la clase.
+     * 入力フォーマットに応じてリクエストパラメータを取得する
+     *
+     * クラスに定義されたパーサ（$_inputType）を使用してリクエストボディを解析します。
+     *
+     * @return mixed パースされたデータ、または生の入力文字列
      */
     protected function param()
     {
         $input = file_get_contents('php://input');
         $format = $this->_inputFormat;
-        /* verifica si el formato tiene un parser válido */
+        /* 指定されたフォーマットに有効なパーサがあるか確認 */
         if (isset($this->_inputType[$format]) && is_callable($this->_inputType[$format])) {
             $result = call_user_func($this->_inputType[$format], $input);
             if ($result) {
@@ -155,12 +167,12 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * Envia un error al cliente junto con el mensaje.
+     * クライアントにエラーとメッセージを返す
      *
-     * @param string $text  texto del error
-     * @param int    $error Número del error HTTP
+     * @param string $text  エラーメッセージ
+     * @param int    $error HTTP ステータスコード
      *
-     * @return array data de error
+     * @return array エラー情報を含む配列
      */
     protected function error($text, $error = 400)
     {
@@ -170,36 +182,37 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * Retorna los formato aceptados por el cliente ordenados por prioridad
-     * interpretando la cabecera HTTP_ACCEPT.
+     * クライアントが受け入れ可能なフォーマットを、
+     * HTTP_ACCEPT ヘッダから優先度付きで取得する
      *
-     * @return array
+     * @return array MIME タイプをキー、優先度を値とした配列（優先度の高い順にソート済み）
      */
     protected static function accept()
     {
-        /* para almacenar los valores acceptados por el cliente */
+        /* クライアントが Accept しているフォーマットを格納する配列 */
         $aTypes = [];
-        /* Elimina espacios, convierte a minusculas, y separa */
+        /* 空白を削除し、小文字に変換してから分割 */
         $accept = explode(',', strtolower(str_replace(' ', '', Input::server('HTTP_ACCEPT'))));
         foreach ($accept as $a) {
-            $q = 1; /* Por defecto la prioridad es 1, el siguiente verifica si es otra */
+            $q = 1; /* 優先度が指定されていない場合のデフォルトは 1 */
             if (strpos($a, ';q=')) {
-                /* parte el "mime/type;q=X" en dos: "mime/type" y "X" */
+                /* "mime/type;q=X" を "mime/type" と "X" に分割 */
                 [$a, $q] = explode(';q=', $a);
             }
             $aTypes[$a] = $q;
         }
-        /* ordena por prioridad (mayor a menor) */
+        /* 優先度の高い順にソート */
         arsort($aTypes);
 
         return $aTypes;
     }
 
     /**
-     * Parse JSON
-     * Convierte formato JSON en array asociativo.
+     * JSON をパースする
      *
-     * @param string $input
+     * JSON 文字列を連想配列に変換します。
+     *
+     * @param string $input JSON 文字列
      *
      * @return array|string
      */
@@ -209,12 +222,12 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * Parse XML.
+     * XML をパースする
      *
-     * Convierte formato XML en un objeto, esto será necesario volverlo estandar
-     * si se devuelven objetos o arrays asociativos
+     * XML 文字列を SimpleXMLElement オブジェクトに変換します。
+     * 必要に応じて、さらに標準化された配列やオブジェクトに変換することも想定されています。
      *
-     * @param string $input
+     * @param string $input XML 文字列
      *
      * @return \SimpleXMLElement|null
      */
@@ -223,17 +236,17 @@ abstract class KumbiaRest extends Controller
         try {
             return new SimpleXMLElement($input);
         } catch (Exception $e) {
-            // Do nothing
+            // 何もしない（パース失敗時は null を返す）
         }
     }
 
     /**
-     * Parse CSV.
+     * CSV をパースする
      *
-     * Convierte CSV en arrays numéricos,
-     * cada item es una linea
+     * CSV 文字列を数値添字配列の配列に変換します。
+     * 各要素が 1 行分のデータになります。
      *
-     * @param string $input
+     * @param string $input CSV 文字列
      *
      * @return array
      */
@@ -252,9 +265,9 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * Realiza la conversión de formato de Formulario a array.
+     * フォーム形式の文字列を配列に変換する
      *
-     * @param string $input
+     * @param string $input クエリストリング形式の文字列
      *
      * @return array
      */
@@ -266,7 +279,7 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * Retorna el tipo de formato de entrada.
+     * 入力の MIME タイプを取得する
      *
      * @return string
      */
@@ -281,27 +294,29 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * Devuelve le nombre del formato de salida.
+     * 出力フォーマット名を取得する
      *
-     * @param array $validOutput Array de formatos de salida soportado
+     * @param array $validOutput サポートしている出力フォーマットの配列
+     *                           （キー: MIME タイプ, 値: フォーマット名）
      *
-     * @return string
+     * @return string 使用するフォーマット名
      */
     protected static function getOutputFormat(array $validOutput)
     {
-        /* busco un posible formato de salida */
+        /* クライアントの要求に合う出力フォーマットを探す */
         $accept = self::accept();
-        foreach ($accept as $key) {
+        foreach ($accept as $key => $q) {
             if (array_key_exists($key, $validOutput)) {
                 return $validOutput[$key];
             }
         }
 
+        // 該当がなければデフォルトで JSON を使用
         return 'json';
     }
 
     /**
-     * Retorna todas las cabeceras enviadas por el cliente.
+     * クライアントから送信されたすべての HTTP ヘッダを取得する
      *
      * @return array
      */
@@ -311,16 +326,20 @@ abstract class KumbiaRest extends Controller
     }
 
     /**
-     * En producción envia el error con el formato de salida
+     * 本番環境では出力フォーマットに従ってエラーを返す
+     *
+     * 定義されていないメソッドが呼ばれた際のハンドラ。
      *
      * @return void
      */
     public function __call($name, $arguments)
     {
-        if(PRODUCTION) {
-            $this->data = $this->error('Not found', 404);
+        if (PRODUCTION) {
+            // 本番環境では 404 エラーとして処理
+            $this->data = $this->error('リソースが見つかりません', 404);
             return;
         }
+        // 開発環境では通常の未定義メソッド扱い（例外）
         parent::__call($name, $arguments);
     }
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Controller
@@ -15,7 +15,9 @@
  */
 
 /**
- * Clase principal para los controladores de Kumbia
+ * Kumbia コントローラの基底クラス
+ *
+ * すべてのアプリケーションコントローラはこのクラスを継承します。
  *
  * @category   Kumbia
  * @package    Controller
@@ -25,82 +27,103 @@ abstract class Controller
 {
 
     /**
-     * Nombre del modulo actual
+     * 現在のモジュール名
      *
      * @var string
      */
     public string $module_name;
+
     /**
-     * Nombre del controlador actual
+     * 現在のコントローラ名
      *
      * @var string
      */
     public string $controller_name;
+
     /**
-     * Nombre de la acción actual
+     * 現在のアクション名
      *
      * @var string
      */
     public string $action_name;
+
     /**
-     * Parámetros de la acción
+     * アクションに渡されたパラメータ
      *
      * @var array
      */
     public array $parameters;
+
     /**
-     * Limita la cantidad correcta de
-     * parametros de una action
+     * アクションに渡されるパラメータ数を検証するかどうか
      *
      * @var bool
      */
     public $limit_params = true;
 
     /**
-     * Data disponble para mostrar
+     * ビューに渡すためのデータ
      * 
      * @var mixed
      */
     public $data;
 
+    /**
+     * コントローラのコンストラクタ
+     *
+     * ルーターから渡された情報を元に各種プロパティを初期化し、
+     * View の初期化も行います。
+     *
+     * @param array $args ルーターから渡される情報
+     */
     public function __construct(array $args)
     {
-        $this->module_name = $args['module'];
+        $this->module_name     = $args['module'];
         $this->controller_name = $args['controller'];
-        $this->parameters = $args['parameters'];
-        $this->action_name = $args['action'];
+        $this->parameters      = $args['parameters'];
+        $this->action_name     = $args['action'];
         View::init($args['action'], $args['controller_path']);
     }
 
     /**
-     * BeforeFilter
+     * アクション実行前フィルタ（前処理）
      *
-     * @return false|null
+     * 必要に応じて各コントローラでオーバーライドして使用します。
+     *
+     * @return false|null false を返すとアクションの実行を中断
      */
     protected function before_filter()
     {
     }
 
     /**
-     * AfterFilter
+     * アクション実行後フィルタ（後処理）
      *
-     * @return false|void
+     * 必要に応じて各コントローラでオーバーライドして使用します。
+     *
+     * @return false|void false を返すと後続処理を抑制可能
      */
     protected function after_filter()
     {
     }
 
     /**
-     * Initialize
+     * コントローラの初期化処理
      *
-     * @return false|void
+     * コントローラ生成直後に一度だけ呼ばれます。
+     * 必要に応じて各コントローラでオーバーライドして使用します。
+     *
+     * @return false|void false を返すと before_filter が呼ばれません
      */
     protected function initialize()
     {
     }
 
     /**
-     * Finalize
+     * コントローラの終了処理
+     *
+     * レスポンス生成後の後片付けなどに使用します。
+     * 必要に応じて各コントローラでオーバーライドして使用します。
      *
      * @return false|void
      */
@@ -109,9 +132,10 @@ abstract class Controller
     }
 
     /**
-     * Ejecuta los callback filter
+     * 各種コールバックフィルタを実行する
      *
-     * @param boolean $init filtros de inicio
+     * @param bool $init true の場合は initialize / before_filter を、
+     *                   false の場合は after_filter / finalize を実行します
      * @return false|void
      */
     final public function k_callback($init = false)
@@ -128,11 +152,11 @@ abstract class Controller
     }
 
     /**
-     * Se llama cuando no existe un método
+     * 存在しないメソッドが呼び出された際に実行されるマジックメソッド
      *
-     * @param string $name      
-     * @param array  $arguments
-     * @throws KumbiaException
+     * @param string $name      呼び出されたメソッド名
+     * @param array  $arguments 渡された引数
+     * @throws KumbiaException  対応するアクションが存在しない場合にスロー
      * 
      * @return void
      */

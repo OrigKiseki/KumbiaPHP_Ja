@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   View
  *
@@ -14,64 +14,71 @@
  */
 
 /**
- * Renderer de vistas.
+ * ビューをレンダリングするクラス
  *
  * @category   View
  */
 class KumbiaView
 {
     /**
-     * Contenido.
+     * 出力コンテンツ
      *
      * @var string|null
      */
     protected static $_content;
+
     /**
-     * Vista a renderizar.
+     * レンダリング対象のビュー名
      *
      * @var string
-     * */
+     */
     protected static $_view;
+
     /**
-     * Template.
+     * 使用するテンプレート名
      *
      * @var string|null
      */
     protected static $_template = 'default';
+
     /**
-     * Indica el tipo de salida generada por el controlador.
+     * コントローラによって生成されるレスポンスの種類
+     * （xml などの拡張子として利用）
      *
      * @var string
      */
     protected static $_response;
+
     /**
-     * Indica el path al que se le añadira la constante correspondiente.
+     * ビューファイルのベースパス（この後ろにビュー名などが連結される）
      *
      * @var string
      */
     protected static $_path;
+
     /**
-     * Número de minutos que será cacheada la vista actual.
+     * 現在のビューをキャッシュする時間（分）
      *
-     * type: tipo de cache (view, template)
-     * time: tiempo de vida de cache
+     * type: キャッシュ種別 (view, template)
+     * time: キャッシュの有効時間
+     * group: キャッシュのグループ名
      *
      * @var array
      */
     protected static $_cache = ['type' => false, 'time' => false, 'group' => false];
 
     /**
-     * Datos del Controlador actual.
+     * 現在のコントローラのデータ
      *
      * @var array
      */
     protected static $_controller;
 
     /**
-     * Initialize view
+     * ビューの初期化
      *
-     * @param string $view
-     * @param string $path
+     * @param string $view ビュー名
+     * @param string $path ビューのパス
      * @return void
      */
     public static function init($view, $path)
@@ -79,14 +86,14 @@ class KumbiaView
         self::$_view = $view;
         self::$_path = $path.'/';
         //self::$init = true;
-        // TODO add defaults if init executed (workerman, ngx-php,...)
+        // TODO init が実行された場合のデフォルト値を追加 (workerman, ngx-php,...)
     }
 
     /**
-     * Cambia el view y opcionalmente el template.
+     * 表示する view と、必要に応じて template を変更する
      *
-     * @param string|null    $view     nombre del view a utilizar sin .phtml
-     * @param string|null    $template opcional nombre del template a utilizar sin .phtml
+     * @param string|null $view     利用するビュー名（拡張子 .phtml は不要）
+     * @param string|null $template 利用するテンプレート名（拡張子 .phtml は不要）
      * 
      * @return void
      */
@@ -94,16 +101,16 @@ class KumbiaView
     {
         self::$_view = $view;
 
-        // verifica si se indico template
+        // template が指定されているか確認
         if ($template !== '') {
             self::$_template = $template;
         }
     }
 
     /**
-     * Asigna el template para la vista.
+     * ビューで使用するテンプレートを設定する
      *
-     * @param string|null $template nombre del template a utilizar sin .phtml
+     * @param string|null $template 利用するテンプレート名（拡張子 .phtml は不要）
      * 
      * @return void
      */
@@ -113,13 +120,13 @@ class KumbiaView
     }
 
     /**
-     * Indica el tipo de Respuesta dada por el controlador
-     * buscando el view con esa extension.
-     * ej. View::response('xml');
-     * buscara: views/controller/action.xml.phtml.
+     * コントローラからのレスポンス種別を指定し、
+     * その拡張子に対応する view を探す
+     * 例: View::response('xml');
+     * → views/controller/action.xml.phtml を探す。
      *
-     * @param string        $response
-     * @param string|null   $template Opcional nombre del template sin .phtml
+     * @param string      $response レスポンス種別
+     * @param string|null $template 任意のテンプレート名（拡張子 .phtml なし）
      * 
      * @return void
      */
@@ -127,16 +134,16 @@ class KumbiaView
     {
         self::$_response = $response;
 
-        // verifica si se indico template
+        // template が指定されているか確認
         if ($template !== null) {
             self::$_template = $template;
         }
     }
 
     /**
-     * Asigna el path de la vista.
+     * ビューのパスを設定する
      *
-     * @param string $path path de la vista sin extension .phtml
+     * @param string $path 拡張子 .phtml を除いたビューのパス
      * 
      * @return void
      */
@@ -146,7 +153,7 @@ class KumbiaView
     }
 
     /**
-     * Obtiene el path para vista incluyendo la extension .phtml.
+     * ビューのパス（拡張子 .phtml を含む）を取得する
      *
      * @return string
      */
@@ -160,9 +167,9 @@ class KumbiaView
     }
 
     /**
-     * Obtiene un atributo de KumbiaView.
+     * KumbiaView の属性値を取得する
      *
-     * @param string $atribute nombre de atributo (template, response, path, etc)
+     * @param string $atribute 属性名（template, response, path など）
      * 
      * @return mixed
      */
@@ -172,52 +179,52 @@ class KumbiaView
     }
 
     /**
-     * Asigna cacheo de vistas o template.
+     * ビューまたはテンプレートのキャッシュ設定を行う
      *
-     * @param string|null  $time Tiempo de vida de cache
-     * @param string        $type Tipo de cache (view, template)
-     * @param string        $group Grupo de pertenencia de cache
+     * @param string|null $time  キャッシュの有効時間
+     * @param string      $type  キャッシュ種別 (view, template)
+     * @param string      $group キャッシュグループ名
      *
-     * @return bool En producción y cache de view
+     * @return bool 本番環境かつ view キャッシュの場合には、キャッシュが有効かどうかを返す
      */
     public static function cache($time, $type = 'view', $group = 'kumbia.view')
     {
-        if ($time === null) { //TODO borrar cache
+        if ($time === null) { // TODO キャッシュ削除処理
             return self::$_cache['type'] = false;
         }
-        self::$_cache['type'] = $type;
-        self::$_cache['time'] = $time;
+        self::$_cache['type']  = $type;
+        self::$_cache['time']  = $time;
         self::$_cache['group'] = $group;
-        //Si está en producción para view
+        // 本番環境かつビューキャッシュの場合
         if (PRODUCTION && $type === 'view') {
-            return self::getCache(); //TRUE si está cacheada
+            return self::getCache(); // キャッシュがあれば TRUE
         }
 
         return false;
     }
 
     /**
-     * Obtiene la cache de view.
+     * ビューのキャッシュを取得する
      *
-     * @return bool
+     * @return bool キャッシュが取得できたかどうか
      */
     protected static function getCache()
     {
-        // el contenido permanece nulo si no hay nada cacheado o la cache expiro
+        // キャッシュが存在しない、または期限切れの場合は $_content は null のまま
         self::$_content = Cache::driver()->get(Router::get('route'), self::$_cache['group']);
 
         return self::$_content !== null;
     }
 
     /**
-     * Obtiene el view.
+     * ビューのファイルパスを取得する
      *
-     * @return string path del view
+     * @return string ビューのファイルパス
      */
     protected static function getView()
     {
         $file = APP_PATH.'views/'.self::getPath();
-        //Si no existe el view y es scaffold
+        // ビューが存在せず、scaffold 指定がある場合
         if (!is_file($file) && ($scaffold = self::$_controller['scaffold'] ?? null)) {
             $file = APP_PATH."views/_shared/scaffolds/$scaffold/".self::$_view.'.phtml';
         }
@@ -226,24 +233,24 @@ class KumbiaView
     }
 
     /**
-     * Cachea el view o template.
+     * ビューまたはテンプレートをキャッシュに保存する
      *
-     * @param string $type view o template
+     * @param string $type view または template
      * 
      * @return void
      */
     protected static function saveCache($type)
     {
-        // si esta en produccion y se cachea la vista
+        // 本番環境かつ指定された種別のキャッシュを行う場合
         if (PRODUCTION && self::$_cache['type'] === $type) {
             Cache::driver()->save(ob_get_contents(), self::$_cache['time'], Router::get('route'), self::$_cache['group']);
         }
     }
 
     /**
-     * Renderiza la vista.
+     * ビューをレンダリングする
      *
-     * @param Controller $controller
+     * @param Controller $controller 現在のコントローラインスタンス
      * 
      * @return void
      */
@@ -255,59 +262,60 @@ class KumbiaView
             return; 
         }
 
-        // Guarda los datos del controlador y los envia
+        // コントローラのプロパティを保存し、それを元に出力を生成
         self::generate(self::$_controller = get_object_vars($controller));
     }
 
     /**
-     * Genera la vista.
+     * ビューの生成処理
      *
-     * @param array $controller
+     * @param array $controller コントローラのプロパティ配列
      * 
      * @return void
      */
     protected static function generate($controller)
     {
-        // Registra la autocarga de helpers
+        // ヘルパーのオートロードを登録
         spl_autoload_register('kumbia_autoload_helper', true, true);
-        // Mapea los atributos del controller en el scope
+        // コントローラの属性をローカルスコープへ展開
         extract($controller, EXTR_OVERWRITE);
 
-        // carga la vista si tiene view y no esta cacheada
+        // ビューが指定されており、かつキャッシュされていない場合
         if (self::$_view && self::$_content === null) {
-            // Carga el contenido del buffer de salida
+            // 現時点の出力バッファの内容を取得
             self::$_content = ob_get_clean();
-            // Renderizar vista
+            // ビューのレンダリングを開始
             ob_start();
 
-            // carga la vista
+            // ビューファイルを読み込む
             if (!include self::getView()) {
-                throw new KumbiaException('Vista "'.self::getPath().'" no encontrada', 'no_view');
+                throw new KumbiaException('ビュー「'.self::getPath().'」が見つかりません', 'no_view');
             }
 
-            // si esta en produccion y se cachea la vista
+            // ビューキャッシュの保存（必要な場合）
             self::saveCache('view');
 
-            // Verifica si hay template
+            // テンプレートが指定されていない場合は、そのまま出力して終了
             if (!self::$_template) {
                 ob_end_flush();
 
                 return;
             }
 
+            // ビューの出力内容をコンテンツとして保持
             self::$_content = ob_get_clean();
         }
 
-        // Renderizar template
+        // テンプレートのレンダリング
         if ($__template = self::$_template) {
             ob_start();
 
-            // carga el template
+            // テンプレートを読み込む
             if (!include APP_PATH."views/_shared/templates/$__template.phtml") {
-                throw new KumbiaException("Template $__template no encontrado");
+                throw new KumbiaException("テンプレート $__template が見つかりません");
             }
 
-            // si esta en produccion y se cachea template
+            // テンプレートキャッシュの保存（必要な場合）
             self::saveCache('template');
             ob_end_flush();
 
@@ -318,7 +326,7 @@ class KumbiaView
     }
 
     /**
-     * Imprime el contenido del buffer.
+     * バッファされたコンテンツを出力する
      * 
      * @return void
      */
@@ -332,26 +340,27 @@ class KumbiaView
     }
 
     /**
-     * Renderiza una vista parcial.
+     * 部分テンプレート（パーシャル）をレンダリングする
      *
      * @throw KumbiaException
-     * @param  string            $partial vista a renderizar
-     * @param  string            $__time  tiempo de cache
-     * @param  array|string|null $params  variables para el partial
-     * @param  string            $group   grupo de cache
+     * @param  string            $partial レンダリングするパーシャル名
+     * @param  string            $__time  キャッシュ有効時間
+     * @param  array|string|null $params  パーシャルに渡す変数
+     * @param  string            $group   キャッシュグループ名
      * @return void
      */
     public static function partial($partial, $__time = '', $params = null, $group = 'kumbia.partials')
     {
+        // 本番環境かつキャッシュ時間指定があり、キャッシュ開始に成功した場合はその内容を使用して戻る
         if (PRODUCTION && $__time && !Cache::driver()->start($__time, $partial, $group)) {
             return;
         }
 
-        //Verificando el partials en el dir app
+        // まず app 側の partials ディレクトリを探す
         $__file = APP_PATH."views/_shared/partials/$partial.phtml";
 
         if (!is_file($__file)) {
-            //Verificando el partials en el dir core
+            // 見つからなければ core 側の partials ディレクトリを探す
             $__file = CORE_PATH."views/partials/$partial.phtml";
         }
 
@@ -360,27 +369,27 @@ class KumbiaView
                 $params = Util::getParams(explode(',', $params));
             }
 
-            // carga los parametros en el scope
+            // パラメータをローカルスコープへ展開
             extract($params, EXTR_OVERWRITE);
         }
 
-        // carga la vista parcial
+        // パーシャルを読み込む
         if (!include $__file) {
-            throw new KumbiaException('Vista Parcial "'.$__file.'" no encontrada', 'no_partial');
+            throw new KumbiaException('パーシャルビュー「'.$__file.'」が見つかりません', 'no_partial');
         }
 
-        // se guarda en la cache de ser requerido
+        // キャッシュが指定されている場合は、ここでキャッシュを完了させる
         if (PRODUCTION && $__time) {
             Cache::driver()->end();
         }
     }
 
     /**
-     * Obtiene el valor de un atributo público o todos del controlador.
+     * コントローラの public 属性、もしくは全属性を取得する
      *
-     * @param string $var nombre de variable
+     * @param string $var 変数名（省略した場合は全体を返す）
      *
-     * @return mixed valor de la variable
+     * @return mixed 変数の値
      */
     public static function getVar($var = '')
     {
@@ -393,13 +402,13 @@ class KumbiaView
 }
 
 /**
- * Atajo para htmlspecialchars, por defecto toma el charset de la
- * aplicacion.
+ * htmlspecialchars のショートカット関数
+ * デフォルトでアプリケーションの charset を使用します。
  *
- * @param string $string
- * @param string $charset
+ * @param string $string エスケープ対象の文字列
+ * @param string $charset 文字コード
  *
- * @return string
+ * @return string エスケープ後の文字列
  */
 function h($string, $charset = APP_CHARSET)
 {

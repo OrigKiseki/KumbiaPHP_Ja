@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  *
@@ -14,19 +14,19 @@
  */
 
 /**
- * Cargador Selectivo.
+ * 選択的ローダークラス
  *
- * Clase para la carga de librerias tanto del core como de la app.
- * Carga de los modelos de una app.
+ * コアおよびアプリケーション双方のライブラリを読み込むためのクラス。
+ * アプリケーションのモデルを読み込む機能も提供します。
  *
  * @category   Kumbia
  */
 class Load
 {
     /**
-     * Carga libreria de APP, si no existe carga del CORE.
+     * APP 側のライブラリを読み込み、存在しない場合は CORE 側から読み込む
      *
-     * @param string $lib libreria a cargar
+     * @param string $lib 読み込むライブラリ名
      * @throw KumbiaException
      */
     public static function lib($lib)
@@ -40,33 +40,33 @@ class Load
     }
 
     /**
-     * Carga libreria del core.
+     * コア側のライブラリを読み込む
      *
-     * @param string $lib libreria a cargar
+     * @param string $lib 読み込むライブラリ名
      * @throw KumbiaException
      */
     public static function coreLib($lib)
     {
         if (!include CORE_PATH."libs/$lib/$lib.php") {
-            throw new KumbiaException("Librería: \"$lib\" no encontrada");
+            throw new KumbiaException("ライブラリ \"$lib\" が見つかりません");
         }
     }
 
     /**
-     * Obtiene la instancia de un modelo.
+     * モデルのインスタンスを取得する
      *
-     * @param string $model  modelo a instanciar en small_case
-     * @param array  $params parámetros para instanciar el modelo
+     * @param string $model  small_case 形式のモデル名
+     * @param array  $params モデルのコンストラクタに渡すパラメータ
      *
-     * @return object model
+     * @return object モデルインスタンス
      */
     public static function model($model, array $params = [])
     {
-        //Nombre de la clase
+        // クラス名（キャメルケースに変換）
         $Model = Util::camelcase(basename($model));
-        //Si no esta cargada la clase
+        // クラスがまだ読み込まれていない場合
         if (!class_exists($Model, false)) {
-            //Carga la clase
+            // クラスを読み込む
             if (!include APP_PATH."models/$model.php") {
                 throw new KumbiaException($model, 'no_model');
             }
@@ -76,9 +76,9 @@ class Load
     }
 
     /**
-     * Carga modelos.
+     * 複数のモデルを読み込む
      *
-     * @param string|array $model en small_case
+     * @param string|array $model small_case 形式のモデル名（配列または可変引数）
      * @throw KumbiaException
      */
     public static function models($model)
@@ -86,7 +86,7 @@ class Load
         $args = is_array($model) ? $model : func_get_args();
         foreach ($args as $model) {
             $Model = Util::camelcase(basename($model));
-            //Si esta cargada continua con la siguiente clase
+            // すでにクラスが読み込まれている場合は次へ
             if (class_exists($Model, false)) {
                 continue;
             }

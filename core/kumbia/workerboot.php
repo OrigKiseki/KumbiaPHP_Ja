@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Core
@@ -15,25 +15,24 @@
  */
 
 /**
- * Este script ejecuta la carga de KumbiaPHP con Workerman
+ * このスクリプトは Workerman 上で KumbiaPHP を読み込み・実行します
  *
  * @category   Kumbia
  * @package    Core
  */
 
-
 require_once CORE_PATH.'../../autoload.php';
 
 use Workerman\Timer;
 
-// Iniciar el buffer de salida
+// 出力バッファを開始
 //ob_start();
 
-// Kumbia Version
+// Kumbia のバージョン情報
 require CORE_PATH.'kumbia/kumbia_version.php';
 
 /**
- * Inicializar el ExceptionHandler TODO
+ * ExceptionHandler の初期化 TODO
  * @see KumbiaException
  *
  * @return void
@@ -54,8 +53,8 @@ require CORE_PATH.'kumbia/static_router.php';
 require APP_PATH.'libs/app_controller.php';
 // @see KumbiaView
 require APP_PATH.'libs/view.php';
-// Ejecuta el request
-// Dispatch y renderiza la vista
+// リクエストを実行
+// Dispatch してビューをレンダリング
 
 function kumbiaSend() {
     ob_start();ob_start();

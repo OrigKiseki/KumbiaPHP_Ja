@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Console
@@ -13,11 +13,11 @@
  * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
-// carga libreria para manejo de cache
+// キャッシュ操作用ライブラリを読み込む
 Load::lib('cache');
 
 /**
- * Consola para manejar la cache
+ * キャッシュを操作するためのコンソールクラス
  *
  * @category   Kumbia
  * @package    Console
@@ -26,54 +26,54 @@ class CacheConsole
 {
 
     /**
-     * Comando de consola para limpiar la cache
+     * キャッシュを全体／グループ単位で削除するコンソールコマンド
      *
-     * @param array $params parametros nombrados de la consola
-     * @param string $group nombre de grupo
+     * @param array  $params コンソールから渡された名前付きパラメータ
+     * @param string $group  グループ名（省略時は全体）
      * @throw KumbiaException
      */
     public function clean($params, $group = '')
     {
-        // obtiene el driver de cache
+        // キャッシュドライバを取得
         $cache = $this->setDriver($params);
 
-        // limpia la cache
+        // キャッシュを削除
         if ($cache->clean($group)) {
             if ($group) {
-                echo "-> Se ha limpiado el grupo $group", PHP_EOL;
+                echo "-> グループ $group のキャッシュを削除しました", PHP_EOL;
             } else {
-                echo "-> Se ha limpiado la cache", PHP_EOL;
+                echo "-> キャッシュを削除しました", PHP_EOL;
             }
         } else {
-            throw new KumbiaException('No se ha logrado eliminar el contenido de la cache');
+            throw new KumbiaException('キャッシュの内容を削除できませんでした');
         }
     }
 
     /**
-     * Comando de consola para eliminar un elemento cacheado
+     * キャッシュされた要素を 1 件削除するコンソールコマンド
      *
-     * @param array $params parametros nombrados de la consola
-     * @param string $id id del elemento
-     * @param string $group nombre de grupo
+     * @param array  $params コンソールから渡された名前付きパラメータ
+     * @param string $id     要素のID
+     * @param string $group  グループ名
      * @throw KumbiaException
      */
     public function remove($params, $id, $group = 'default')
     {
-        // obtiene el driver de cache
+        // キャッシュドライバを取得
         $cache = $this->setDriver($params);
 
-        // elimina el elemento
+        // 要素を削除
         if ($cache->remove($id, $group)) {
-            echo '-> Se ha eliminado el elemento de la cache', PHP_EOL;
+            echo '-> キャッシュ要素を削除しました', PHP_EOL;
         } else {
-            throw new KumbiaException("No se ha logrado eliminar el elemento \"$id\" del grupo \"$group\"");
+            throw new KumbiaException("ID \"$id\" を持つ要素をグループ \"$group\" から削除できませんでした");
         }
     }
-    
+
     /**
-     * Devuelve una instancia de cache del driver pasado
+     * 指定されたドライバのキャッシュインスタンスを返す
      *
-     * @param array $params parametros nombrados
+     * @param array $params 名前付きパラメータ配列
      */
     private function setDriver($params)
     {
@@ -81,7 +81,7 @@ class CacheConsole
             return Cache::driver($params['driver']);
         } 
         return Cache::driver();
-        
+
     }
 
 }

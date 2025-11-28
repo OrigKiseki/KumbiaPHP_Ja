@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Console
@@ -15,7 +15,7 @@
  */
 
 /**
- * Consola para manejar modelos.
+ * モデルを操作するためのコンソールクラス
  *
  * @category   Kumbia
  * @package    Console
@@ -23,78 +23,80 @@
 class ModelConsole
 {
     /**
-     * Comando de consola para crear un modelo.
+     * モデルを作成するコンソールコマンド
      *
-     * @param array  $params parametros nombrados de la consola
-     * @param string $model  modelo
+     * @param array  $params コンソールから渡された名前付きパラメータ
+     * @param string $model  モデル名
      * @throw KumbiaException
      */
     public function create($params, $model)
     {
-        // nombre de archivo
-        $file = APP_PATH.'models';
+        // ファイルのベースパス
+        $file = APP_PATH . 'models';
 
-        // obtiene el path
+        // パスを取得
         $path = explode('/', trim($model, '/'));
 
-        // obtiene el nombre de modelo
+        // モデル名を取得
         $model_name = array_pop($path);
 
+        // サブディレクトリが指定されている場合
         if (count($path)) {
             $dir = implode('/', $path);
             $file .= "/$dir";
             if (!is_dir($file) && !FileUtil::mkdir($file)) {
-                throw new KumbiaException("No se ha logrado crear el directorio \"$file\"");
+                throw new KumbiaException("ディレクトリ \"$file\" を作成できませんでした");
             }
         }
         $file .= "/$model_name.php";
 
-        // si no existe o se sobreescribe
+        // ファイルが存在しない、または上書きする場合
         if (!is_file($file) ||
-            Console::input('El modelo existe, desea sobrescribirlo? (s/n): ', array('s', 'n')) == 's') {
-            // nombre de clase
+            Console::input('モデルは既に存在します。上書きしますか？ (s/n): ', array('s', 'n')) == 's') {
+
+            // クラス名
             $class = Util::camelcase($model_name);
 
-            // codigo de modelo
+            // モデルのコード生成
             ob_start();
-            include __DIR__.'/generators/model.php';
-            $code = '<?php'.PHP_EOL.ob_get_clean();
+            include __DIR__ . '/generators/model.php';
+            $code = '<?php' . PHP_EOL . ob_get_clean();
 
-            // genera el archivo
+            // ファイルを生成
             if (file_put_contents($file, $code)) {
-                echo "-> Creado modelo $model_name en: $file".PHP_EOL;
+                echo "-> モデル $model_name を作成しました: $file" . PHP_EOL;
             } else {
-                throw new KumbiaException("No se ha logrado crear el archivo \"$file\"");
+                throw new KumbiaException("ファイル \"$file\" を作成できませんでした");
             }
         }
     }
 
     /**
-     * Comando de consola para eliminar un modelo.
+     * モデルを削除するコンソールコマンド
      *
-     * @param array  $params parametros nombrados de la consola
-     * @param string $model  modelo
+     * @param array  $params コンソールから渡された名前付きパラメータ
+     * @param string $model  モデル名
      * @throw KumbiaException
      */
     public function delete($params, $model)
     {
-        // nombre de archivo
-        $file = APP_PATH.'models/'.trim($model, '/');
+        // ファイルパス
+        $file = APP_PATH . 'models/' . trim($model, '/');
 
-        // si es un directorio
+        // ディレクトリかどうか
         if (is_dir($file)) {
             $success = FileUtil::rmdir($file);
         } else {
-            // entonces es un archivo
+            // ディレクトリでなければファイルとして扱う
             $file = "$file.php";
             $success = unlink($file);
         }
 
-        // mensaje
+        // 結果メッセージ
         if ($success) {
-            echo "-> Eliminado: $file".PHP_EOL;
+            echo "-> 削除しました: $file" . PHP_EOL;
         } else {
-            throw new KumbiaException("No se ha logrado eliminar \"$file\"");
+            throw new KumbiaException("\"$file\"を削除できませんでした");
         }
     }
 }

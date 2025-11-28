@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Console
@@ -15,7 +15,7 @@
  */
 
 /**
- * Consola para manejar controladores
+ * コントローラーを操作するためのコンソールクラス
  *
  * @category   Kumbia
  * @package    Console
@@ -24,112 +24,112 @@ class ControllerConsole
 {
 
     /**
-     * Comando de consola para crear un controlador
+     * コントローラーを作成するコンソールコマンド
      *
-     * @param array $params parametros nombrados de la consola
-     * @param string $controller controlador
+     * @param array  $params     コンソールから渡された名前付きパラメータ
+     * @param string $controller コントローラー名
      * @throw KumbiaException
      */
     public function create($params, $controller)
     {
-        // nombre de archivo
+        // ファイル名のベースパス
         $file = APP_PATH . 'controllers';
 
-        // limpia el path de controller
+        // コントローラーのパスをトリム
         $clean_path = trim($controller, '/');
 
-        // obtiene el path
+        // パスを分解
         $path = explode('/', $clean_path);
 
-        // obtiene el nombre de controlador
+        // コントローラー名を取得
         $controller_name = array_pop($path);
 
-        // si se agrupa el controlador en un directorio
+        // コントローラーをディレクトリでグループ化している場合
         if (count($path)) {
             $dir = implode('/', $path);
             $file .= "/$dir";
             if (!is_dir($file) && !FileUtil::mkdir($file)) {
-                throw new KumbiaException("No se ha logrado crear el directorio \"$file\"");
+                throw new KumbiaException("ディレクトリ \"$file\" を作成できませんでした");
             }
         }
         $file .= "/{$controller_name}_controller.php";
 
-        // si no existe o se sobreescribe
+        // ファイルが存在しない、または上書きする場合
         if (!is_file($file) ||
-                Console::input("El controlador existe, ¿desea sobrescribirlo? (s/n): ", array('s', 'n')) == 's') {
+                Console::input("コントローラーは既に存在します。上書きしますか？ (s/n): ", array('s', 'n')) == 's') {
 
-            // nombre de clase
+            // クラス名
             $class = Util::camelcase($controller_name);
 
-            // codigo de controlador
+            // コントローラーのコード生成
             ob_start();
             include __DIR__ . '/generators/controller.php';
             $code = '<?php' . PHP_EOL . ob_get_clean();
 
-            // genera el archivo
+            // ファイルを出力
             if (file_put_contents($file, $code)) {
-                echo "-> Creado controlador $controller_name en: $file" . PHP_EOL;
+                echo "-> コントローラー $controller_name を作成しました: $file" . PHP_EOL;
             } else {
-                throw new KumbiaException("No se ha logrado crear el archivo \"$file\"");
+                throw new KumbiaException("ファイル \"$file\" を作成できませんでした");
             }
 
-            // directorio para vistas
+            // ビュー用ディレクトリ
             $views_dir = APP_PATH . "views/$clean_path";
 
-            //si el directorio no existe
+            // ビュー用ディレクトリが存在しない場合
             if (!is_dir($views_dir)) {
                 if (FileUtil::mkdir($views_dir)) {
-                    echo "-> Creado directorio para vistas: $views_dir" . PHP_EOL;
+                    echo "-> ビュー用ディレクトリを作成しました: $views_dir" . PHP_EOL;
                 } else {
-                    throw new KumbiaException("No se ha logrado crear el directorio \"$views_dir\"");
+                    throw new KumbiaException("ディレクトリ \"$views_dir\" を作成できませんでした");
                 }
             }
         }
     }
 
     /**
-     * Comando de consola para eliminar un controlador
+     * コントローラーを削除するコンソールコマンド
      *
-     * @param array $params parametros nombrados de la consola
-     * @param string $controller controlador
+     * @param array  $params     コンソールから渡された名前付きパラメータ
+     * @param string $controller コントローラー名
      * @throw KumbiaException
      */
     public function delete($params, $controller)
     {
-        // path limpio al controlador
+        // コントローラーへのパスをトリム
         $clean_path = trim($controller, '/');
 
-        // nombre de archivo
+        // ファイル／ディレクトリのベースパス
         $file = APP_PATH . "controllers/$clean_path";
 
-        // si es un directorio
+        // ディレクトリかどうかを判定
         if (is_dir($file)) {
             $success = FileUtil::rmdir($file);
         } else {
-            // entonces es un archivo
+            // ディレクトリでなければファイルとして扱う
             $file = "{$file}_controller.php";
             $success = unlink($file);
         }
 
-        // mensaje
+        // 結果メッセージ
         if ($success) {
-            echo "-> Eliminado: $file" . PHP_EOL;
+            echo "-> 削除しました: $file" . PHP_EOL;
         } else {
-            throw new KumbiaException("No se ha logrado eliminar \"$file\"");
+            throw new KumbiaException("\"$file\"を削除できませんでした");
         }
 
-        // directorio para vistas
+        // ビュー用ディレクトリ
         $views_dir = APP_PATH . "views/$clean_path";
 
-        // intenta eliminar el directorio de vistas
+        // ビュー用ディレクトリの削除を試みる
         if (is_dir($views_dir)
-                && Console::input('¿Desea eliminar el directorio de vistas? (s/n): ', array('s', 'n')) == 's') {
+                && Console::input('ビュー用ディレクトリも削除しますか？ (s/n): ', array('s', 'n')) == 's') {
 
             if (!FileUtil::rmdir($views_dir)) {
-                throw new KumbiaException("No se ha logrado eliminar \"$views_dir\"");
+                throw new KumbiaException("\"$views_dir\"を削除できませんでした");
             }
 
-            echo "-> Eliminado: $views_dir" . PHP_EOL;
+            echo "-> 削除しました: $views_dir" . PHP_EOL;
         }
     }
 

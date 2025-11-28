@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Core
@@ -15,20 +15,20 @@
  */
 
 /**
- * Este script ejecuta la carga de KumbiaPHP
+ * KumbiaPHP を読み込み・起動するためのスクリプト
  *
  * @category   Kumbia
  * @package    Core
  */
 
-// Iniciar el buffer de salida
+// 出力バッファを開始
 ob_start();
 
-// Kumbia Version
+// Kumbia のバージョン情報
 require CORE_PATH.'kumbia/kumbia_version.php';
 
 /**
- * Inicializar el ExceptionHandler
+ * 例外ハンドラを初期化
  * @see KumbiaException
  *
  * @return void
@@ -45,16 +45,16 @@ if (PRODUCTION && Config::get('config.application.cache_template')) {
     // @see Cache
     require CORE_PATH.'libs/cache/cache.php';
 
-    //Asigna el driver por defecto usando el config.ini
+    // config.ini の設定に従ってデフォルトのキャッシュドライバを設定
     if ($config = Config::get('config.application.cache_driver')) {
         Cache::setDefault($config);
     }
 
-    // Verifica si esta cacheado el template
+    // テンプレートがキャッシュされているか確認
     if ($template = Cache::driver()->get($url, 'kumbia.templates')) {
-        //verifica cache de template para la url
+        // 該当 URL のテンプレートキャッシュを出力
         echo $template;
-        echo '<!-- Time: ', round((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000, 4), ' ms -->';
+        echo '<!-- 実行時間: ', round((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000, 4), ' ms -->';
         return;
     }
 }
@@ -68,8 +68,7 @@ require APP_PATH.'libs/app_controller.php';
 // @see KumbiaView
 require APP_PATH.'libs/view.php';
 
-// Ejecuta el request
-// Dispatch y renderiza la vista
+// リクエストを実行し、ディスパッチしてビューをレンダリング
 View::render(Router::execute($url));
 
-// Fin del request exit()
+// リクエスト終了 exit()

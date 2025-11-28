@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  *
@@ -14,26 +14,26 @@
  */
 
 /**
- * Utilidades para uso general del framework.
+ * フレームワーク全体で利用するユーティリティクラス
  *
- * Manejo de cadenas de caracteres.
- * Conversión de parametros con nombre a arreglos.
+ * 文字列の操作や、
+ * 名前付きパラメータを配列に変換する処理などを提供します。
  *
  * @category   Kumbia
  */
 class Util
 {
     /**
-     * Convierte la cadena con espacios o guión bajo en notación camelcase.
+     * スペースまたはアンダースコア区切りの文字列を camelCase 形式に変換する
      *
-     * @param string $str   cadena a convertir
-     * @param bool   $lower indica si es lower camelcase
+     * @param string $str   変換対象の文字列
+     * @param bool   $lower true の場合は lowerCamelCase（先頭小文字）にする
      *
      * @return string
-     * */
+     */
     public static function camelcase($str, $lower = false)
     {
-        // Notacion lowerCamelCase
+        // lowerCamelCase を返す場合
         if ($lower) {
             return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $str))));
         }
@@ -42,33 +42,33 @@ class Util
     }
 
     /**
-     * Convierte la cadena CamelCase en notación smallcase.
+     * CamelCase 形式の文字列を small_case（スネークケース・小文字）に変換する
      *
-     * @param string $str cadena a convertir
+     * @param string $str 変換対象の文字列
      *
      * @return string
-     * */
+     */
     public static function smallcase($str)
     {
         return strtolower(preg_replace('/([A-Z])/', '_\\1', lcfirst($str)));
     }
 
     /**
-     * Remplaza en la cadena los espacios por guiónes bajos (underscores).
+     * 文字列中のスペースをアンダースコア（_）に置き換える
      *
-     * @param string $str
+     * @param string $str 変換対象の文字列
      *
      * @return string
-     * */
+     */
     public static function underscore($str)
     {
         return strtr($str, ' ', '_');
     }
 
     /**
-     * Remplaza en la cadena los espacios por dash (guiones).
+     * 文字列中のスペースをダッシュ（-、ハイフン）に置き換える
      *
-     * @param string $str
+     * @param string $str 変換対象の文字列
      *
      * @return string
      */
@@ -78,9 +78,9 @@ class Util
     }
 
     /**
-     * Remplaza en una cadena los underscore o dashed por espacios.
+     * 文字列中のアンダースコア（_）やダッシュ（-）をスペースに置き換える
      *
-     * @param string $str
+     * @param string $str 変換対象の文字列
      *
      * @return string
      */
@@ -90,11 +90,14 @@ class Util
     }
 
     /**
-     * Convierte los parámetros de una función o método de parámetros por nombre a un array.
+     * 名前付きパラメータ形式の配列を通常の配列に変換する
      *
-     * @param array $params
+     * 例: ["name: foo", "id: 10"] → ["name" => "foo", "id" => "10"]
+     *     ["foo", "bar"] → インデックス配列として保持
      *
-     * @return array
+     * @param array $params パラメータ配列
+     *
+     * @return array 変換後の配列
      */
     public static function getParams($params)
     {
@@ -116,11 +119,12 @@ class Util
     }
 
     /**
-     * Recibe una cadena como: item1,item2,item3 y retorna una como: "item1","item2","item3".
+     * 「item1,item2,item3」という形式の文字列を
+     * 「"item1","item2","item3"」という形式に変換する
      *
-     * @param string $lista cadena con Items separados por comas (,)
+     * @param string $lista カンマ (,) 区切りのアイテム文字列
      *
-     * @return string cadena con Items encerrados en doblecomillas y separados por comas (,)
+     * @return string 各アイテムをダブルクォーテーションで囲み、カンマ区切りにした文字列
      */
     public static function encomillar($lista)
     {

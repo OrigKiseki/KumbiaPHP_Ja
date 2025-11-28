@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -15,7 +15,7 @@
  */
 
 /**
- * Helper que utiliza Javascript
+ * JavaScript を利用するヘルパークラス
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -23,104 +23,105 @@
 class Js
 {
     /**
-     * Javascripts que son requisito de otros
+     * 他のスクリプトから依存される JavaScript ファイル
      *
      * @var array
-     * */
+     */
     protected static $_dependencies = array();
-    
+
     /**
-     * Javascript
+     * 読み込む JavaScript ファイル一覧
      *
      * @var array
-     * */
+     */
     protected static $_js = array();
-    
+
     /**
-     * Directorio Javascript
+     * JavaScript のディレクトリ
      *
-     * @var array
-     * */
+     * @var string
+     */
     protected static $js_dir = 'javascript/';
 
     /**
-     * Crea un enlace en una Aplicacion con mensaje de confirmacion respetando
-     * las convenciones de Kumbia
+     * Kumbia の規約に従い、確認メッセージ付きのリンクを生成します
      *
-     * @param string $action ruta a la accion
-     * @param string $text texto a mostrar
-     * @param string $confirm mensaje de confirmacion
-     * @param string $class clases adicionales para el link
-     * @param string|array $attrs atributos adicionales
+     * @param string       $action  アクションへのパス
+     * @param string       $text    表示テキスト
+     * @param string       $confirm 確認メッセージ
+     * @param string       $class   リンクに付与する追加クラス
+     * @param string|array $attrs   追加属性
      * @return string
      */
-    public static function link($action, $text, $confirm = '¿Está Seguro?', $class = '', $attrs = '')
+    public static function link($action, $text, $confirm = '本当に実行してもよろしいですか？', $class = '', $attrs = '')
     {
         $attrs = Tag::getAttrs($attrs);
         return '<a href="' . PUBLIC_PATH . "$action\" data-msg=\"$confirm\" class=\"js-confirm $class\" $attrs>$text</a>";
     }
 
     /**
-     * Crea un enlace a una accion con mensaje de confirmacion respetando
-     * las convenciones de Kumbia
+     * Kumbia の規約に従い、確認メッセージ付きで
+     * 現在のコントローラ内のアクションへのリンクを生成します
      *
-     * @param string $action accion
-     * @param string $text texto a mostrar
-     * @param string $confirm mensaje de confirmacion
-     * @param string $class clases adicionales para el link
-     * @param string|array $attrs atributos adicionales
+     * @param string       $action  アクション名／パス
+     * @param string       $text    表示テキスト
+     * @param string       $confirm 確認メッセージ
+     * @param string       $class   リンクに付与する追加クラス
+     * @param string|array $attrs   追加属性
      * @return string
      */
-    public static function linkAction($action, $text, $confirm = '¿Está Seguro?', $class = '', $attrs = '')
+    public static function linkAction($action, $text, $confirm = '本当に実行してもよろしいですか？', $class = '', $attrs = '')
     {
         $attrs = Tag::getAttrs($attrs);
         return '<a href="' . PUBLIC_PATH . Router::get('controller_path') . "/$action\" data-msg=\"$confirm\" class=\"js-confirm $class\" $attrs>$text</a>";
     }
 
     /**
-     * Crea un boton submit con mensaje de confirmacion respetando
-     * las convenciones de Kumbia
+     * Kumbia の規約に従い、確認メッセージ付きの submit ボタンを生成します
      *
-     * @param string $text texto a mostrar
-     * @param string $confirm mensaje de confirmacion
-     * @param string $class clases adicionales para el link
-     * @param string|array $attrs atributos adicionales
+     * @param string       $text    表示テキスト
+     * @param string       $confirm 確認メッセージ
+     * @param string       $class   ボタンに付与する追加クラス
+     * @param string|array $attrs   追加属性
      * @return string
      */
-    public static function submit($text, $confirm = '¿Está Seguro?', $class = '', $attrs = '')
+    public static function submit($text, $confirm = '本当に実行してもよろしいですか？', $class = '', $attrs = '')
     {
         $attrs = Tag::getAttrs($attrs);
         return "<input type=\"submit\" value=\"$text\" data-msg=\"$confirm\" class=\"js-confirm $class\" $attrs/>";
     }
 
     /**
-     * Crea un boton de tipo imagen
+     * 確認メッセージ付きの画像ボタン（submit image）を生成します
      *
-     * @param string $img
-     * @param string $class clases adicionales para el link
-     * @param string|array $attrs atributos adicionales
+     * @param string       $img     画像ファイル名／パス
+     * @param string       $class   ボタンに付与する追加クラス
+     * @param string|array $attrs   追加属性
      * @return string
      */
-    public static function submitImage($img, $confirm = '¿Está Seguro?', $class = '', $attrs = '')
+    public static function submitImage($img, $confirm = '本当に実行してもよろしいですか？', $class = '', $attrs = '')
     {
         $attrs = Tag::getAttrs($attrs);
         return "<input type=\"image\" data-msg=\"$confirm\" src=\"" . PUBLIC_PATH . "img/$img\" class=\"js-confirm $class\" $attrs/>";
     }
 
     /**
-     * Añade un archivo Javascript para ser incluido en el template
+     * テンプレートで読み込む JavaScript ファイルを登録します
      *
-     * @param string $file nombre del archivo a añadir
-     * @param array $dependencies archivos que son requisito del archivo a añadir
+     * @param string $file         追加するファイル名（拡張子なし）
+     * @param array  $dependencies 先に読み込まれる必要がある依存ファイル名の配列
      */
-    public static function add( $file, $dependencies=array() )
+    public static function add($file, $dependencies = array())
     {
         self::$_js[$file] = $file;
-        foreach ($dependencies as $file) self::$_dependencies[$file] = $file;
+        foreach ($dependencies as $file) {
+            self::$_dependencies[$file] = $file;
+        }
     }
-    
+
     /**
-     * Incluye todos los archivo Javascript en el template añadidos con el metodo add
+     * add メソッドで登録されたすべての JavaScript ファイルを
+     * `<script>` タグとして出力します
      *
      * @return string
      */
@@ -128,8 +129,7 @@ class Js
     {
         $js = self::$_dependencies + self::$_js;
         $html = '';
-        foreach ($js as $file)
-        {
+        foreach ($js as $file) {
             $html .= '<script type="text/javascript" src="' . PUBLIC_PATH . self::$js_dir . "$file.js" . '"></script>';
         }
         return $html;

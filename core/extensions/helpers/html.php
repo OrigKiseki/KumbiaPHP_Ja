@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -15,36 +15,39 @@
  */
 
 /**
- * Helper para Tags Html.
+ * HTML タグ用ヘルパークラス
  *
  * @category   KumbiaPHP
  */
 class Html
 {
     /**
-     * Metatags.
+     * メタタグを保持する配列
      *
      * @var array
      */
     protected static $_metatags = array();
+
     /**
-     * Enlaces de head.
+     * head 内に出力する link 要素を保持する配列
      *
      * @var array
      */
     protected static $_headLinks = array();
 
     /**
-     * Crea un enlace usando la constante PUBLIC_PATH, para que siempre funcione.
+     * PUBLIC_PATH 定数を使用してリンクを生成します。
+     * これにより、常に正しいパスでリンクが動作します。
      *
      * @example <?= Html::link('usuario/crear','Crear usuario') ?>
-     * @example Imprime un enlace al controlador usuario y a la acción crear, con el texto 'Crear usuario'
+     * @example コントローラ usuario の crear アクションへのリンクを、
+     *          テキスト 'Crear usuario' で出力します。
      * @example <?= Html::link('usuario/crear','Crear usuario', 'class="button"') ?>
-     * @example El mismo anterior, pero le añade el atributo class con valor button
+     * @example 上記と同じですが、class="button" 属性を追加します。
      *
-     * @param string       $action Ruta a la acción
-     * @param string       $text   Texto a mostrar
-     * @param string|array $attrs  Atributos adicionales
+     * @param string       $action アクションへのパス
+     * @param string       $text   表示テキスト
+     * @param string|array $attrs  追加属性
      *
      * @return string
      */
@@ -58,16 +61,17 @@ class Html
     }
 
     /**
-     * Crea un enlace a una acción del mismo controller que estemos.
+     * 現在のコントローラ内のアクションへのリンクを生成します。
      *
      * @example <?= Html::linkAction('crear/','Crear') ?>
-     * @example Imprime un enlace a la acción crear del mismo controlador en el que estemos, con el texto 'Crear'
+     * @example 現在のコントローラの crear アクションへのリンクを、
+     *          テキスト 'Crear' で出力します。
      * @example <?= Html::linkAction('usuario/crear','Crear usuario', 'class="button"') ?>
-     * @example El mismo anterior, pero le añade el atributo class con valor button
+     * @example 上記と同じですが、class="button" 属性を追加します。
      *
-     * @param string       $action Ruta a la acción
-     * @param string       $text   Texto a mostrar
-     * @param string|array $attrs  Atributos adicionales
+     * @param string       $action アクションへのパス
+     * @param string       $text   表示テキスト
+     * @param string|array $attrs  追加属性
      *
      * @return string
      */
@@ -79,16 +83,16 @@ class Html
     }
 
     /**
-     * Permite incluir una imagen, por defecto va la carpeta public/img/
+     * 画像タグを生成します。デフォルトでは public/img/ 配下を参照します。
      *
      * @example <?= Html::img('logo.png','Logo de KumbiaPHP') ?>
-     * @example Imprime una etiqueta img <img src="/img/logo.png" alt="Logo de KumbiaPHP">
+     * @example <img src="/img/logo.png" alt="Logo de KumbiaPHP"> を出力します。
      * @example <?= Html::img('logo.png','Logo de KumbiaPHP', 'width="100px" height="100px"') ?>
-     * @example Imprime una etiqueta img <img src="/img/logo.png" alt="Logo de KumbiaPHP" width="100px" height="100px">
+     * @example <img src="/img/logo.png" alt="Logo de KumbiaPHP" width="100px" height="100px"> を出力します。
      *
-     * @param string       $src   Ruta de la imagen a partir de la carpeta public/img/
-     * @param string       $alt   Texto alternativo de la imagen.
-     * @param string|array $attrs Atributos adicionales
+     * @param string       $src   public/img/ からの相対パス
+     * @param string       $alt   画像の代替テキスト
+     * @param string|array $attrs 追加属性
      *
      * @return string
      */
@@ -98,10 +102,10 @@ class Html
     }
 
     /**
-     * Crea un metatag.
+     * meta タグを登録します。
      *
-     * @param string       $content contenido del metatag
-     * @param string|array $attrs   atributos
+     * @param string       $content meta タグの content 属性の値
+     * @param string|array $attrs   その他の属性
      */
     public static function meta($content, $attrs = '')
     {
@@ -113,7 +117,7 @@ class Html
     }
 
     /**
-     * Incluye los metatags.
+     * 登録されている meta タグを出力します。
      *
      * @return string
      */
@@ -127,11 +131,11 @@ class Html
     }
 
     /**
-     * Crea una lista a partir de un array.
+     * 配列から HTML のリスト（ul または ol）を生成します。
      *
-     * @param array        $array Array con el contenido de la lista
-     * @param string       $type  por defecto ul, y si no ol
-     * @param string|array $attrs atributos
+     * @param array        $array リストに表示する要素の配列
+     * @param string       $type  デフォルトは 'ul'、'ol' を指定すると番号付きリスト
+     * @param string|array $attrs リストタグの属性
      *
      * @return string
      */
@@ -150,7 +154,7 @@ class Html
     }
 
     /**
-     * Incluye los CSS.
+     * 登録されている CSS を link タグとして出力します。
      *
      * @return string
      */
@@ -165,10 +169,10 @@ class Html
     }
 
     /**
-     * Enlaza un recurso externo.
+     * 外部リソースへの link タグを head 用キューに登録します。
      *
-     * @param string       $href  direccion url del recurso a enlazar
-     * @param string|array $attrs atributos
+     * @param string       $href  リソースの URL
+     * @param string|array $attrs link タグの属性
      */
     public static function headLink($href, $attrs = '')
     {
@@ -180,10 +184,10 @@ class Html
     }
 
     /**
-     * Enlaza una accion.
+     * アプリケーション内のアクションへの link タグを登録します。
      *
-     * @param string       $action ruta de accion
-     * @param string|array $attrs  atributos
+     * @param string       $action アクションのパス
+     * @param string|array $attrs  link タグの属性
      */
     public static function headLinkAction($action, $attrs = '')
     {
@@ -191,10 +195,10 @@ class Html
     }
 
     /**
-     * Enlaza un recurso de la aplicacion.
+     * public ディレクトリ配下のリソースへの link タグを登録します。
      *
-     * @param string       $resource ubicacion del recurso en public
-     * @param string|array $attrs    atributos
+     * @param string       $resource public からのリソースパス
+     * @param string|array $attrs    link タグの属性
      */
     public static function headLinkResource($resource, $attrs = '')
     {
@@ -202,7 +206,7 @@ class Html
     }
 
     /**
-     * Incluye los links para el head.
+     * head 用に登録された link タグをすべて出力します。
      *
      * @return string
      */
@@ -217,16 +221,18 @@ class Html
     }
 
     /**
-     * Incluye imágenes de gravatar.com.
+     * gravatar.com の画像を表示する img タグを生成します。
      *
-     * @example Simple: <?= Html::gravatar($email); ?>
-     * @example Completo: echo Html::gravatar( $email, $name, 20, 'http://www.example.com/default.jpg') <br>
-     * @example Un gravatar que es un link: echo Html::link( Html::gravatar($email), $url)
+     * @example シンプルな使用例: <?= Html::gravatar($email); ?>
+     * @example 詳細指定: echo Html::gravatar($email, $name, 20, 'http://www.example.com/default.jpg')
+     * @example Gravatar 画像自体をリンクにする例:
+     *          echo Html::link(Html::gravatar($email), $url)
      *
-     * @param string $email   Correo para conseguir su gravatar
-     * @param string $alt     Texto alternativo de la imagen. Por defecto: gravatar
-     * @param int    $size    Tamaño del gravatar. Un número de 1 a 512. Por defecto: 40
-     * @param string $default URL gravatar por defecto si no existe, o un default de gravatar. Por defecto: mm
+     * @param string $email   Gravatar を取得するためのメールアドレス
+     * @param string $alt     画像の代替テキスト（デフォルト: gravatar）
+     * @param int    $size    画像サイズ（1〜512、デフォルト: 40）
+     * @param string $default Gravatar が存在しない場合に使用するデフォルト画像の URL、
+     *                        または Gravatar のデフォルト指定値（デフォルト: mm）
      *
      * @return string
      */

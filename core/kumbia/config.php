@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Config
  *
@@ -14,32 +14,30 @@
  */
 
 /**
- * Clase para la carga de Archivos de configuración.
+ * 設定ファイル読み込み用クラス
  * 
- * Aplica el patrón Singleton que utiliza un array
- * indexado por el nombre del archivo para evitar que
- * un fichero de configuración sea leido mas de una
- * vez en runtime con lo que aumentamos la velocidad.
+ * シングルトンに近い形で、読み込んだ設定を
+ * 配列にキャッシュして再利用します。
+ * 同じ設定ファイルを runtime 中に何度も読み込まないことで、
+ * パフォーマンスを向上させます。
  *
  * @category   Kumbia
  */
 class Config
 {
     /**
-     * Contain all the config
-     * -
-     * Contenido de variables de configuración.
+     * 読み込まれた全設定を保持する配列
      *
      * @var array<array-key,mixed>
      */
     protected static $config = [];
 
     /**
-     * Get config
+     * 設定値を取得する
      * -
-     * Obtiene configuración.
+     * `fichero.sección.variable` 形式で設定を取得します。
      *
-     * @param string $var fichero.sección.variable
+     * @param string $var fichero.sección.variable 形式のキー
      *
      * @throws KumbiaException
      * @return mixed
@@ -53,14 +51,12 @@ class Config
             3 => self::$config[$sections[0]][$sections[1]][$sections[2]] ?? null,
             2 => self::$config[$sections[0]][$sections[1]] ?? null,
             1 => self::$config[$sections[0]] ?? null,
-            default => throw new KumbiaException('Máximo 3 niveles en Config::get(fichero.sección.variable), pedido: '.$var)
+            default => throw new KumbiaException('Config::get(ファイル.セクション.変数) の階層は最大 3 つまでです。指定されたキー: '.$var)
         };
     }
 
     /**
-     * Get all configs
-     * -
-     * Obtiene toda la configuración.
+     * 現在読み込まれているすべての設定を取得する
      *
      * @return array<array-key,mixed>
      */
@@ -70,12 +66,12 @@ class Config
     }
 
     /**
-     * Set variable in config
+     * 設定値を代入する
      * -
-     * Asigna un atributo de configuración.
+     * `fichero.sección.variable` 形式で設定値を書き込みます。
      *
-     * @param string $var   variable de configuración
-     * @param mixed  $value valor para atributo
+     * @param string $var   設定キー（fichero.sección.variable）
+     * @param mixed  $value 設定する値
      * 
      * @throws KumbiaException
      * @return void
@@ -87,17 +83,17 @@ class Config
             3 => self::$config[$sections[0]][$sections[1]][$sections[2]] = $value,
             2 => self::$config[$sections[0]][$sections[1]] = $value,
             1 => self::$config[$sections[0]] = $value,
-            default => throw new KumbiaException('Máximo 3 niveles en Config::set(fichero.sección.variable), pedido: '.$var)
+            default => throw new KumbiaException('Config::set(ファイル.セクション.変数) の階層は最大 3 つまでです。指定されたキー: '.$var)
         };
     }
 
     /**
-     * Read config file
+     * 設定ファイルを読み込む
      * -
-     * Lee y devuelve un archivo de configuración.
+     * 指定された設定ファイルを読み込み、その内容を返します。
      *
-     * @param string $file  archivo .php o .ini
-     * @param bool   $force forzar lectura de .php o .ini
+     * @param string $file  対象となる .php または .ini ファイル名（拡張子なし）
+     * @param bool   $force すでに読み込まれていても再読込する場合は true
      *
      * @return array<array-key,mixed>
      */
@@ -111,11 +107,13 @@ class Config
     }
 
     /**
-     * Load config file
+     * 実際に設定ファイルを読み込む内部メソッド
      * -
-     * Lee un archivo de configuración.
+     * まず `config/$file.php` を試し、
+     * なければ `config/$file.ini` を parse_ini_file で読み込みます。
+     * （パフォーマンスの観点から .php の使用が推奨されます）
      *
-     * @param string $file archivo
+     * @param string $file ファイル名（拡張子なし）
      * 
      * @return array<array-key,mixed>
      */
@@ -125,7 +123,7 @@ class Config
 
             return require APP_PATH."config/$file.php";
         }
-        // sino carga el .ini desaconsejado por rendimiento (legacy)
+        // .php が無い場合は .ini を読み込む（パフォーマンス上は非推奨・レガシー用途）
         return parse_ini_file(APP_PATH."config/$file.ini", true);
     }
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Core
@@ -17,10 +17,12 @@
 // @see Util
 require CORE_PATH.'kumbia/util.php';
 
-// Autocarga de clases
+/**
+ * クラスのオートロードを行う
+ */
 function kumbia_autoload($class)
 {
-    // Optimizando carga
+    // 読み込みを最適化するために、よく使うクラスを事前に定義
     static $classes;
     $classes ??= [
         'ActiveRecord'    => APP_PATH.'libs/active_record.php',
@@ -34,18 +36,18 @@ function kumbia_autoload($class)
         include $classes[$class];
         return;
     }
-    // PSR0
+    // 名前空間を含む場合は PSR-0 形式として扱う
     if (str_contains($class, '\\')) {
         kumbia_autoload_vendor($class);
         return;
     }
-    // for legacy apps
+    // レガシーアプリケーション向けの特別対応
     if ($class === 'Flash') {
         kumbia_autoload_helper('Flash');
         return;
     }
 
-    // Convert to smallcase
+    // クラス名を小文字に変換
     $sclass = Util::smallcase($class);
     if (is_file(APP_PATH."models/$sclass.php")) {
         include APP_PATH."models/$sclass.php";
@@ -59,19 +61,25 @@ function kumbia_autoload($class)
         include CORE_PATH."libs/$sclass/$sclass.php";
         return;
     }
-    // Perhaps is PEAR,  zend framework 1, ...
+    // PEAR や Zend Framework 1 など、外部ライブラリのクラスである可能性がある場合
     kumbia_autoload_vendor($class);
 }
 
+/**
+ * vendor ディレクトリ内のクラスを PSR-0 形式でオートロードする
+ */
 function kumbia_autoload_vendor($class): void
 {
-    //Autoload PSR0
+    // PSR-0 形式のオートロード
     $psr0 = dirname(APP_PATH, 2).'/vendor/'.str_replace(['_', '\\'], DIRECTORY_SEPARATOR, $class).'.php';
     if (is_file($psr0)) {
         include $psr0;
     }
 }
 
+/**
+ * ヘルパークラスのオートロード
+ */
 function kumbia_autoload_helper($class): void
 {
     $sclass = Util::smallcase($class);
@@ -84,5 +92,5 @@ function kumbia_autoload_helper($class): void
     }
 }
 
-// Registrar la autocarga
+// オートローダーを登録
 spl_autoload_register('kumbia_autoload');

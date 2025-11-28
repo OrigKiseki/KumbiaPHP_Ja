@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -15,11 +15,12 @@
  */
 
 /**
- * Clase para enviar mensajes a la vista
+ * ビューにメッセージを送信するクラス
  *
- * Envio de mensajes de advertencia, éxito, información
- * y errores a la vista.
- * Tambien envia mensajes en la consola, si se usa desde consola.
+ * 警告・成功・情報・エラーなどのメッセージを
+ * ビューに表示するために使用します。
+ * コンソールから利用された場合は、コンソールにも
+ * メッセージを出力します。
  *
  * @category   Kumbia
  * @package    Flash
@@ -28,10 +29,10 @@ class Flash
 {
 
     /**
-     * Visualiza un mensaje flash
+     * フラッシュメッセージを表示する
      *
-     * @param string $name  Para tipo de mensaje y para CSS class='$name'.
-     * @param string $text  Mensaje a mostrar
+     * @param string $name メッセージ種別（CSS class="$name" にも使用される）
+     * @param string $text 表示するメッセージ
      */
     public static function show(string $name, string $text): void
     {
@@ -39,14 +40,14 @@ class Flash
             echo '<div class="', $name, ' flash">', $text, '</div>', PHP_EOL;
             return;
         }
-        // salida CLI
+        // CLI 出力
         echo $name, ': ', strip_tags($text), PHP_EOL;
     }
 
     /**
-     * Visualiza un mensaje de error
+     * エラーメッセージを表示する
      *
-     * @param string $text
+     * @param string $text 表示するメッセージ
      */
     public static function error(string $text): void
     {
@@ -54,9 +55,9 @@ class Flash
     }
 
     /**
-     * Visualiza un mensaje de advertencia en pantalla
+     * 警告メッセージを表示する
      *
-     * @param string $text
+     * @param string $text 表示するメッセージ
      */
     public static function warning(string $text): void
     {
@@ -64,9 +65,9 @@ class Flash
     }
 
     /**
-     * Visualiza informacion en pantalla
+     * 情報メッセージを表示する
      *
-     * @param string $text
+     * @param string $text 表示するメッセージ
      */
     public static function info(string $text): void
     {
@@ -74,9 +75,9 @@ class Flash
     }
 
     /**
-     * Visualiza informacion de suceso correcto en pantalla
+     * 処理成功メッセージを表示する
      *
-     * @param string $text
+     * @param string $text 表示するメッセージ
      */
     public static function valid(string $text): void
     {

@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -15,7 +15,7 @@
  */
 
 /**
- * Helper que utiliza Css
+ * CSS を扱うヘルパークラス
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -23,49 +23,52 @@
 class Css
 {
     /**
-     * Css que son requisito de otros
+     * 他の CSS から依存される CSS ファイル
      *
      * @var array
-     * */
-    protected static $_dependencies  = array();
-    
+     */
+    protected static $_dependencies = array();
+
     /**
-     * Css
+     * 読み込む CSS ファイル一覧
      *
      * @var array
-     * */
+     */
     protected static $_css = array();
     
     /**
-     * Directorio Css
+     * CSS ディレクトリ
      *
-     * @var array
-     * */
+     * @var string
+     */
     protected static $css_dir = 'css/';
 
     /**
-     * Añade un archivo Css fuera del template para ser incluido en el template
+     * テンプレート外から CSS ファイルを登録し、
+     * テンプレート内でまとめて読み込めるようにします
      *
-     * @param string $file nombre del archivo a añadir
-     * @param array $dependencies  archivos que son requisito del archivo a añadir
+     * @param string $file          追加する CSS ファイル名（拡張子なし）
+     * @param array  $dependencies  先に読み込まれる必要がある依存 CSS ファイル名配列
      */
-    public static function add( $file, array $dependencies = [] )
+    public static function add($file, array $dependencies = [])
     {
         self::$_css[$file] = $file;
-        foreach ($dependencies  as $file) self::$_dependencies [$file] = $file;
+        foreach ($dependencies as $file) {
+            self::$_dependencies[$file] = $file;
+        }
     }
-    
+
     /**
-     * Incluye todos los archivo Css en el template añadidos con el metodo add
+     * add メソッドで登録されたすべての CSS ファイルを
+     * `<link>` タグとして出力します
      *
-     * @return string
+     * @return string 生成された `<link>` タグの HTML
      */
     public static function inc()
     {
-        $css = self::$_dependencies  + self::$_css;
+        $css  = self::$_dependencies + self::$_css;
         $html = '';
-        foreach ($css as $file)
-        {
+        foreach ($css as $file) {
             $html .= '<link href="' . PUBLIC_PATH . self::$css_dir . "$file.css\" rel=\"stylesheet\" type=\"text/css\" />" . PHP_EOL;
         }
         return $html;

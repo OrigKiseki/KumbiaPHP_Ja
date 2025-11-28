@@ -1,12 +1,12 @@
 <?php
 
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -15,58 +15,58 @@
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
 /**
- * Helper para Formularios.
+ * フォーム用ヘルパークラス
  *
  * @category   KumbiaPHP
  */
 class Form
 {
     /**
-     * Utilizado para generar los id de los radio button,
-     * lleva un conteo interno.
+     * ラジオボタンの id を生成するために使用される内部カウンタ
      *
      * @var array
      */
     protected static $radios = array();
 
     /**
-     * Utilizado para avisar al programador,si usa Form::file()
-     * y no tiene el form mulipart muestra un error.
+     * Form::file() が使用されているにもかかわらず、
+     * フォームが multipart になっていない場合に
+     * 開発者へ警告を出すためのフラグ
      *
      * @var bool
      */
     protected static $multipart = false;
 
     /**
-     * Obtiene el valor de un componente tomado
-     * del mismo valor del nombre del campo y formulario
-     * que corresponda a un atributo del mismo nombre
-     * que sea un string, objeto o array.
+     * フィールド名とフォーム名から値を取得します。
      *
-     * @param string $field
-     * @param mixed  $value    valor de campo
-     * @param bool   $filter   filtrar caracteres especiales html
-     * @param bool   $check    si esta marcado el checkbox
-     * @param bool   $is_check
+     * form.field 形式の名前に対応し、同名の属性を持つ
+     * 文字列／オブジェクト／配列などから値を取得して返します。
      *
-     * @return array devuelve un array de longitud 3 con la forma array(id, name, value)
+     * @param string $field   フィールド名（例: user.name）
+     * @param mixed  $value   フィールドのデフォルト値
+     * @param bool   $filter  HTML の特殊文字をフィルタするかどうか
+     * @param bool   $check   チェックボックスがチェックされているか
+     * @param bool   $is_check チェックボックス／ラジオかどうか
+     *
+     * @return array id, name, value の 3 要素を持つ配列 array(id, name, value) を返します
      */
     public static function getField($field, $value = null, $is_check = false, $filter = true, $check = false)
     {
-        // Obtiene considerando el patrón de formato form.field
+        // form.field 形式を考慮して分解
         $formField = explode('.', $field, 2);
         [$id, $name] = self::fieldName($formField);
-        // Verifica en $_POST
+        // まず $_POST を確認
         if (Input::hasPost($field)) {
             $value = $is_check ?
                 Input::post($field) == $value : Input::post($field);
         } elseif ($is_check) {
             $value = $check;
         } elseif ($tmp_val = self::getFromModel($formField)) {
-            // Autocarga de datos
+            // モデルからの自動ロード
             $value = $is_check ? $tmp_val == $value : $tmp_val;
         }
-        // Filtrar caracteres especiales
+        // 特殊文字をエスケープ
         if (!$is_check && $value !== null && $filter) {
             if (is_array($value)) {
                 $value = self::filterArrayValues($value);
@@ -74,10 +74,16 @@ class Form
                 $value = htmlspecialchars($value, ENT_COMPAT, APP_CHARSET);
             }
         }
-        // Devuelve los datos
+        // データを返す
         return array($id, $name, $value);
     }
 
+    /**
+     * 配列内のすべての値に htmlspecialchars を適用する
+     *
+     * @param array $array
+     * @return array
+     */
     private static function filterArrayValues(array $array)
     {
         foreach ($array as &$value) {
@@ -91,7 +97,7 @@ class Form
     }
 
     /**
-     * Devuelve el valor del modelo.
+     * モデル（ビュー変数）から値を取得する
      *
      * @param array $formField array [modelo, campo]
      *
@@ -109,9 +115,9 @@ class Form
     }
 
     /**
-     * Devuelve el nombre y el id de un campo.
+     * フィールドの name と id を返す
      *
-     * @param array $field array del explode
+     * @param array $field explode 結果の配列
      *
      * @return array array(id, name)
      */
@@ -122,16 +128,15 @@ class Form
     }
 
     /**
-     * Obtiene el valor de un componente tomado
-     * del mismo valor del nombre del campo y formulario
-     * que corresponda a un atributo del mismo nombre
-     * que sea un string, objeto o array.
+     * フィールド名とフォーム名から値を取得します。
      *
-     * @param string $field
-     * @param mixed  $value  valor de campo
-     * @param bool   $filter filtrar caracteres especiales html
+     * チェックボックス等を考慮しない通常のフィールド用です。
      *
-     * @return array devuelve un array de longitud 3 con la forma array(id, name, value)
+     * @param string $field  フィールド名
+     * @param mixed  $value  フィールドのデフォルト値
+     * @param bool   $filter HTML の特殊文字をフィルタするかどうか
+     *
+     * @return array id, name, value の 3 要素を持つ配列 array(id, name, value) を返します
      */
     public static function getFieldData($field, $value = null, $filter = true)
     {
@@ -139,16 +144,13 @@ class Form
     }
 
     /**
-     * Obtiene el valor de un componente check tomado
-     * del mismo valor del nombre del campo y formulario
-     * que corresponda a un atributo del mismo nombre
-     * que sea un string, objeto o array.
+     * チェックボックス／ラジオボタン用のフィールド値を取得します
      *
-     * @param string $field
-     * @param string $checkValue
-     * @param bool   $checked
+     * @param string $field      フィールド名
+     * @param string $checkValue チェック時の値
+     * @param bool   $checked    初期状態でチェックするかどうか
      *
-     * @return array Devuelve un array de longitud 3 con la forma array(id, name, checked);
+     * @return array id, name, checked の 3 要素を持つ配列を返します
      */
     public static function getFieldDataCheck($field, $checkValue, $checked = false)
     {
@@ -156,28 +158,32 @@ class Form
     }
 
     /**
-     * @param string       $tag
-     * @param string       $field
-     * @param string       $value
-     * @param string|array $attrs
+     * 共通タグ生成用の内部メソッド
+     *
+     * @param string       $tag   タグ名
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性
+     * @param string       $value 初期値
+     * @param string       $extra 追加の生属性文字列
+     * @param bool         $close 閉じタグを付けるかどうか
      */
     protected static function tag($tag, $field, $attrs = '', $value = '', $extra = '', $close = true)
     {
         $attrs = Tag::getAttrs($attrs);
         $end = $close ? ">{{value}}</$tag>" : '/>';
-        // Obtiene name, id y value (solo para autoload) para el campo y los carga en el scope
+        // フィールドの id, name, value を取得
         [$id, $name, $value] = self::getFieldData($field, $value);
 
         return str_replace('{{value}}', (string) $value, "<$tag id=\"$id\" name=\"$name\" $extra $attrs $end");
     }
 
     /*
-     * Crea un campo input
+     * input 要素を生成します
      *
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string $type
-     * @param string $field
-     * @param string $value
+     * @param string       $type  input の type 属性
+     * @param string       $field フィールド名
+     * @param string|array $attrs フィールド属性（任意）
+     * @param string       $value 初期値
      * @return string
      */
     public static function input($type, $field, $attrs = '', $value = '')
@@ -186,11 +192,11 @@ class Form
     }
 
     /**
-     * Crea una etiqueta de formulario.
+     * form タグを生成します
      *
-     * @param string $action Acción del formulario (opcional)
-     * @param string $method Por defecto es post (opcional)
-     * @param string $attrs  Atributos de etiqueta (opcional)
+     * @param string $action フォームの送信先アクション（任意）
+     * @param string $method メソッド。デフォルトは post（任意）
+     * @param string $attrs  追加属性（任意）
      *
      * @return string
      */
@@ -207,10 +213,10 @@ class Form
     }
 
     /**
-     * Crea una etiqueta de formulario multipart.
+     * multipart 対応の form タグを生成します
      *
-     * @param string       $action Acción del formulario (opcional)
-     * @param string|array $attrs  Atributos de etiqueta (opcional)
+     * @param string       $action フォームの送信先アクション（任意）
+     * @param string|array $attrs  追加属性（任意）
      *
      * @return string
      */
@@ -228,7 +234,7 @@ class Form
     }
 
     /**
-     * Crea una etiqueta para cerrar un formulario.
+     * form の閉じタグを生成します
      *
      * @return string
      */
@@ -240,10 +246,10 @@ class Form
     }
 
     /**
-     * Crea un botón de submit para el formulario actual.
+     * submit ボタンを生成します
      *
-     * @param string       $text  Texto del botón
-     * @param string|array $attrs Atributos de campo (opcional)
+     * @param string       $text  ボタンのラベル
+     * @param string|array $attrs 追加属性（任意）
      *
      * @return string
      */
@@ -253,10 +259,10 @@ class Form
     }
 
     /**
-     * Crea un botón reset.
+     * reset ボタンを生成します
      *
-     * @param string       $text  Texto del botón
-     * @param string|array $attrs Atributos de campo (opcional)
+     * @param string       $text  ボタンのラベル
+     * @param string|array $attrs 追加属性（任意）
      *
      * @return string
      */
@@ -266,14 +272,14 @@ class Form
     }
 
     /**
-     * Crea un botón.
+     * button 要素を生成します
      *
-     * @param string       $text  Texto del botón
-     * @param array|string $attrs Atributos de campo (opcional)
-     * @param string       $type  tipo de botón
-     * @param string       $value Valor para el boton
+     * @param string       $text  ボタンのラベル
+     * @param array|string $attrs 追加属性（任意）
+     * @param string       $type  ボタンタイプ
+     * @param string       $value ボタンの value 属性
      *
-     * @todo FALTA AGREGAR NOMBRE YA QUE SIN ESTE EL VALUE NO LLEGA AL SERVER
+     * @todo name 属性が無いと value がサーバーに送信されないため、name の追加が必要
      *
      * @return string
      */
@@ -286,11 +292,11 @@ class Form
     }
 
     /**
-     * Crea un label.
+     * label 要素を生成します
      *
-     * @param string        $text  Texto a mostrar
-     * @param string        $field Campo al que hace referencia
-     * @param string|array  $attrs Atributos de campo (opcional)
+     * @param string        $text  表示テキスト
+     * @param string        $field 対応するフィールド名（for 属性に使用）
+     * @param string|array  $attrs 追加属性（任意）
      *
      * @return string
      */
@@ -302,11 +308,11 @@ class Form
     }
 
     /**
-     * Crea un campo text.
+     * 単一行テキスト入力フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */
@@ -316,24 +322,24 @@ class Form
     }
 
     /**
-     * Crea un campo select.
+     * select 要素を生成します
      *
-     * @param string       $field  Nombre de campo
-     * @param array        $data   Array de valores para la lista desplegable
-     * @param string|array $attrs  Atributos de campo (opcional)
-     * @param string|array $value  Array para select multiple (opcional)
-     * @param string       $blank  agrega un item vacio si es diferente de empty
-     * @param string       $itemId En caso de usar array de objeto propiedad a tomar como id
-     * @param string       $show   texto a mostrar, si es empty usa el to string
+     * @param string       $field  フィールド名
+     * @param array        $data   選択肢の配列
+     * @param string|array $attrs  追加属性（任意）
+     * @param string|array $value  選択済み値（複数選択時は配列）
+     * @param string       $blank  空の項目を追加する場合のラベル（空でなければ追加）
+     * @param string       $itemId オブジェクト配列使用時の ID プロパティ名
+     * @param string       $show   表示テキストに使用するプロパティ名（空なら toString）
      *
      * @return string
      */
     public static function select($field, $data, $attrs = '', $value = null, $blank = '', $itemId = 'id', $show = '')
     {
         $attrs = Tag::getAttrs($attrs);
-        // Obtiene name, id y value (solo para autoload) para el campo y los carga en el scope
+        // id, name, value を取得
         [$id, $name, $value] = self::getFieldData($field, $value);
-        //Si se quiere agregar blank
+        // 空項目を追加する場合
         $options = empty($blank) ? '' :
             '<option value="">' . htmlspecialchars($blank, ENT_COMPAT, APP_CHARSET) . '</option>';
         foreach ($data as $k => $v) {
@@ -347,11 +353,11 @@ class Form
     }
 
     /**
-     * Retorna el value de un item de un select.
+     * select 要素の value 値を返します
      *
-     * @param mixed  $item item de un array
-     * @param string $key  valor de item dentro del select
-     * @param string $id   valor posible de la propiedad del objecto para el value
+     * @param mixed  $item 配列要素
+     * @param string $key  配列のキー
+     * @param string $id   オブジェクトの場合の ID プロパティ名
      *
      * @return string
      */
@@ -365,13 +371,12 @@ class Form
     }
 
     /**
-     * retorna el atributo para que quede seleccionado el item de un
-     * select.
+     * select 要素の項目を選択状態にするための属性文字列を返します
      *
-     * @param string|array $value valor(es) que deben estar seleccionados
-     * @param string       $key   valor del item actual
+     * @param string|array $value 選択されるべき値（複数の場合は配列）
+     * @param string       $key   現在の項目の値
      *
-     * @return string
+     * @return string selected="selected" または空文字列
      */
     public static function selectedValue($value, $key)
     {
@@ -380,10 +385,10 @@ class Form
     }
 
     /**
-     * Retorna el valor a mostrar del item del select.
+     * select 要素の表示テキストを返します
      *
-     * @param mixed  $item item del array
-     * @param string $show propiedad el objeto
+     * @param mixed  $item 配列要素
+     * @param string $show オブジェクトの場合の表示プロパティ名
      *
      * @return string
      */
@@ -395,19 +400,19 @@ class Form
     }
 
     /**
-     * Crea un campo checkbox.
+     * チェックボックスを生成します
      *
-     * @param string       $field      Nombre de campo
-     * @param string       $checkValue Valor en el checkbox
-     * @param string|array $attrs      Atributos de campo (opcional)
-     * @param bool         $checked    Indica si se marca el campo (opcional)
+     * @param string       $field      フィールド名
+     * @param string       $checkValue チェック時の値
+     * @param string|array $attrs      追加属性（任意）
+     * @param bool         $checked    初期状態でチェックするかどうか（任意）
      *
      * @return string
      */
     public static function check($field, $checkValue, $attrs = '', $checked = false)
     {
         $attrs = Tag::getAttrs($attrs);
-        // Obtiene name y id para el campo y los carga en el scope
+        // id, name, checked を取得
         [$id, $name, $checked] = self::getFieldDataCheck($field, $checkValue, $checked);
 
         if ($checked) {
@@ -418,26 +423,26 @@ class Form
     }
 
     /**
-     * Crea un campo radio button.
+     * ラジオボタンを生成します
      *
-     * @param string       $field      Nombre de campo
-     * @param string       $radioValue Valor en el radio
-     * @param string|array $attrs      Atributos de campo (opcional)
-     * @param bool         $checked    Indica si se marca el campo (opcional)
+     * @param string       $field      フィールド名
+     * @param string       $radioValue ラジオボタンの値
+     * @param string|array $attrs      追加属性（任意）
+     * @param bool         $checked    初期状態でチェックするかどうか（任意）
      *
      * @return string
      */
     public static function radio($field, $radioValue, $attrs = '', $checked = false)
     {
         $attrs = Tag::getAttrs($attrs);
-        // Obtiene name y id para el campo y los carga en el scope
+        // id, name, checked を取得
         [$id, $name, $checked] = self::getFieldDataCheck($field, $radioValue, $checked);
 
         if ($checked) {
             $checked = 'checked="checked"';
         }
 
-        // contador de campos radio
+        // ラジオボタンの連番を管理
         if (isset(self::$radios[$field])) {
             ++self::$radios[$field];
         } else {
@@ -449,10 +454,10 @@ class Form
     }
 
     /**
-     * Crea un botón de tipo imagen.
+     * 画像を使用した submit ボタンを生成します
      *
-     * @param string       $img   Nombre o ruta de la imagen
-     * @param string|array $attrs Atributos de campo (opcional)
+     * @param string       $img   画像ファイル名またはパス
+     * @param string|array $attrs 追加属性（任意）
      *
      * @return string
      */
@@ -464,11 +469,11 @@ class Form
     }
 
     /**
-     * Crea un campo hidden.
+     * hidden フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 値
      *
      * @return string
      */
@@ -478,13 +483,13 @@ class Form
     }
 
     /**
-     * Crea un campo password.
+     * password フィールドを生成します（非推奨）
      *
-     * @deprecated Obsoleta desde la versión 1.0, usar password
+     * @deprecated バージョン 1.0 以降は非推奨です。password() を使用してください。
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 値
      */
     public static function pass($field, $attrs = '', $value = null)
     {
@@ -492,11 +497,11 @@ class Form
     }
 
     /**
-     * Crea un campo passwordop.
+     * password フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 値
      */
     public static function password($field, $attrs = '', $value = null)
     {
@@ -504,27 +509,28 @@ class Form
     }
 
     /**
-     * Crea un campo select que toma los valores de un array de objetos.
+     * オブジェクト配列を元に select 要素を生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string       $show  Campo que se mostrara (opcional)
-     * @param array        $data  Array('modelo','metodo','param') (opcional)
-     * @param string       $blank Campo en blanco (opcional)
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string|array $value (opcional) Array en select multiple
+     * @param string       $field フィールド名
+     * @param string       $show  表示に使用するフィールド名（任意）
+     * @param array        $data  Array('modelo','metodo','param') 形式（任意）
+     * @param string       $blank 空欄として表示するラベル（任意）
+     * @param string|array $attrs 追加属性（任意）
+     * @param string|array $value 選択済み値（任意・複数選択時は配列）
      *
      * @return string
      */
-    public static function dbSelect($field, $show = null, $data = null, $blank = 'Seleccione', $attrs = '', $value = null)
+    public static function dbSelect($field, $show = null, $data = null, $blank = '選択してください', $attrs = '', $value = null)
     {
         $model = ($data === null) ? substr($field, strpos($field, '.') + 1, -3) : $data[0];
         $model = Util::camelcase($model);
         $model_asoc = new $model();
-        //por defecto el primer campo no pk
+        // デフォルトでは最初の非 PK フィールドを表示用に使用
         $show = $show ?: $model_asoc->non_primary[0];
         $pk = $model_asoc->primary_key[0];
         if ($data === null) {
-            $data = $model_asoc->find("columns: $pk,$show", "order: $show asc"); //mejor usar array
+            // カラム指定＋ソート（配列指定を使う方が望ましい）
+            $data = $model_asoc->find("columns: $pk,$show", "order: $show asc");
         } else {
             $data = (isset($data[2])) ?
                 $model_asoc->{$data[1]}($data[2]) :
@@ -535,34 +541,34 @@ class Form
     }
 
     /**
-     * Crea un campo file.
+     * file フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
      *
      * @return string
      */
     public static function file($field, $attrs = '')
     {
-        // aviso al programador
+        // 開発者向けの警告
         if (!self::$multipart) {
-            Flash::error('Para poder subir ficheros, debe abrir el form con Form::openMultipart()');
+            Flash::error('ファイルをアップロードするには、フォームを Form::openMultipart() で開く必要があります');
         }
 
         $attrs = Tag::getAttrs($attrs);
 
-        // Obtiene name y id, y los carga en el scope
+        // id と name を取得
         [$id, $name] = self::getFieldData($field, false);
 
         return "<input id=\"$id\" name=\"$name\" type=\"file\" $attrs/>";
     }
 
     /**
-     * Crea un campo textarea.
+     * textarea フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */
@@ -572,11 +578,11 @@ class Form
     }
 
     /**
-     * Crea un campo fecha nativo (HTML5).
+     * HTML5 の date フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */
@@ -586,12 +592,12 @@ class Form
     }
 
     /**
-     * Crea un campo de texo para fecha (Requiere JS ).
+     * JS を利用した日付入力用テキストフィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string       $class Clase de estilo (opcional)
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string       $class CSS クラス名（任意）
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */
@@ -601,11 +607,11 @@ class Form
     }
 
     /**
-     * Crea un campo tiempo nativo (HTML5).
+     * HTML5 の time フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */
@@ -615,11 +621,11 @@ class Form
     }
 
     /**
-     * Crea un campo fecha/tiempo nativo (HTML5).
+     * HTML5 の datetime-local フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */
@@ -629,11 +635,11 @@ class Form
     }
 
     /**
-     * Crea un campo numerico nativo (HTML5).
+     * HTML5 の number フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */
@@ -643,11 +649,11 @@ class Form
     }
 
     /**
-     * Crea un campo url nativo (HTML5).
+     * HTML5 の url フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */
@@ -657,11 +663,11 @@ class Form
     }
 
     /**
-     * Crea un campo email nativo (HTML5).
+     * HTML5 の email フィールドを生成します
      *
-     * @param string       $field Nombre de campo
-     * @param string|array $attrs Atributos de campo (opcional)
-     * @param string       $value (opcional)
+     * @param string       $field フィールド名
+     * @param string|array $attrs 追加属性（任意）
+     * @param string       $value 初期値（任意）
      *
      * @return string
      */

@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -15,7 +15,7 @@
  */
 
 /**
- * Helper base para creacion de Tags
+ * 各種 HTML タグを生成するための基本ヘルパークラス
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -24,17 +24,18 @@ class Tag
 {
 
     /**
-     * Hojas de estilo
+     * スタイルシートの情報を保持する配列
      *
      * @var array
-     * */
+     */
     protected static $_css = array();
 
     /**
-     * Convierte los argumentos de un metodo de parametros por nombre a un string con los atributos
+     * メソッドに渡された名前付きパラメータを
+     * HTML 属性の文字列へ変換します
      *
-     * @param string|array $params argumentos a convertir
-     * @return string
+     * @param string|array $params 変換対象の引数
+     * @return string 変換後の属性文字列
      */
     public static function getAttrs($params)
     {
@@ -49,13 +50,13 @@ class Tag
     }
 
     /**
-     * Crea un tag
+     * 任意のタグを出力します
      *
-     * @param string $tag nombre de tag
-     * @param string|null $content contenido interno
-     * @param string|array $attrs atributos para el tag
+     * @param string      $tag     タグ名
+     * @param string|null $content タグの中身（null の場合は空要素として出力）
+     * @param string|array $attrs  タグに付与する属性
      * @return void
-     * */
+     */
     public static function create($tag, $content = null, $attrs = '')
     {
         if (is_array($attrs)) {
@@ -71,10 +72,11 @@ class Tag
     }
 
     /**
-     * Incluye un archivo javascript
+     * JavaScript ファイルを読み込むための script タグを生成します
      *
-     * @param string $src archivo javascript
-     * @param boolean $cache indica si se usa cache de navegador
+     * @param string  $src   読み込む JavaScript ファイル名（拡張子なし）
+     * @param boolean $cache ブラウザキャッシュを使用するかどうか
+     * @return string 生成された script タグ
      */
     public static function js($src, $cache = TRUE)
     {
@@ -87,10 +89,10 @@ class Tag
     }
 
     /**
-     * Incluye un archivo de css
+     * CSS ファイルを登録します
      *
-     * @param string $src archivo css
-     * @param string $media medio de la hoja de estilo
+     * @param string $src   CSS ファイル名（拡張子なし）
+     * @param string $media 適用メディア（デフォルト: screen）
      */
     public static function css($src, $media = 'screen')
     {
@@ -98,7 +100,7 @@ class Tag
     }
 
     /**
-     * Obtiene el array de hojas de estilo
+     * 登録されているスタイルシート情報の配列を取得します
      *
      * @return array
      */

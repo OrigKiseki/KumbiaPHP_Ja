@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Core
@@ -31,19 +31,20 @@ require CORE_PATH . 'kumbia/config.php';
 require CORE_PATH . 'kumbia/load.php';
 
 /**
- * modificado por nelsonrojas
- * el problema: al usar console controller create produce un error en linea 85.
- *              no reconoce FileUtil
- * solucion: incluir la libreria con la linea siguiente
+ * nelsonrojas による修正
+ *
+ * 問題: console controller create を使用すると 85 行目でエラーが発生し、
+ *       FileUtil が見つからない。
+ * 解決: 次の行でライブラリを読み込む。
  */
 require CORE_PATH . 'libs/file_util/file_util.php';
 
 /**
- * Manejador de consolas de KumbiaPHP
+ * KumbiaPHP 用コンソールマネージャ
  *
- * Consola para la creación de modelos.
- * Consola para la creación de controladores.
- * Consola para el manejo de cache.
+ * モデル生成用コンソール。
+ * コントローラー生成用コンソール。
+ * キャッシュ操作用コンソール。
  *
  * @category   Kumbia
  * @package    Core
@@ -52,22 +53,24 @@ class Console
 {
 
     /**
-     * Genera la lista de argumentos para la consola, el primer argumento
-     * retornado corresponde al array de parametros nombrados de terminal
+     * コンソール用の引数リストを生成する
      *
-     * @param array $argv argumentos de terminal
+     * 返り値の最初の要素は、ターミナルから渡された
+     * 名前付きパラメータ（--key=value 形式）の配列になります。
+     *
+     * @param array $argv ターミナル引数
      * @return array
-     * */
+     */
     private static function _getConsoleArgs($argv)
     {
         $args = array(array());
 
         foreach ($argv as $p) {
-            if (is_string($p) && preg_match("/--([a-z_0-9]+)[=](.+)/", $p, $regs)) {
-                // carga en el array de parametros nombrados
+            if (is_string($p) && preg_match("/--([a-z_0_9]+)[=](.+)/", $p, $regs)) {
+                // 名前付きパラメータ配列に格納
                 $args[0][$regs[1]] = $regs[2];
             } else {
-                // lo carga como argumento simple
+                // 単純な位置引数として格納
                 $args[] = $p;
             }
         }
@@ -76,37 +79,37 @@ class Console
     }
 
     /**
-     * Crea una instancia de la consola indicada
+     * 指定された名前のコンソールクラスのインスタンスを生成する
      *
-     * @param string $console_name nombre de la consola
-     * return object
-     * @throw KumbiaException
-     * */
+     * @param string $console_name コンソール名
+     * @return object
+     * @throws KumbiaException
+     */
     public static function load($console_name)
     {
-        // nombre de la clase de consola
+        // コンソールクラス名
         $Console = Util::camelcase($console_name) . 'Console';
 
         if (!class_exists($Console)) {
-            // intenta carga el archivo de consola
+            // コンソールクラスファイルの読み込みを試みる
             $file = APP_PATH . "extensions/console/{$console_name}_console.php";
 
             if (!is_file($file)) {
                 $file = CORE_PATH . "console/{$console_name}_console.php";
 
                 if (!is_file($file)) {
-                    throw new KumbiaException('Consola "' . $file . '" no se encontro');
+                    throw new KumbiaException('コンソール "' . $file . '" が見つかりませんでした');
                 }
             }
 
-            // incluye la consola
+            // コンソールをインクルード
             include_once $file;
         }
 
-        // crea la instancia de objeto
+        // オブジェクトインスタンスを生成
         $console = new $Console();
 
-        // inicializa la consola
+        // コンソールの初期化メソッドがあれば呼び出す
         if (method_exists($console, 'initialize')) {
             $console->initialize();
         }
@@ -115,98 +118,98 @@ class Console
     }
 
     /**
-     * Despacha y carga la consola a ejecutar desde argumentos del terminal
+     * ターミナルの引数からコンソールをディスパッチして実行する
      *
-     * @param array $argv argumentos recibidos desde el terminal
-     * @throw KumbiaException
-     * */
+     * @param array $argv ターミナルから受け取った引数
+     * @throws KumbiaException
+     */
     public static function dispatch($argv)
     {
-        // Elimino el nombre de archivo del array de argumentos
+        // 最初の要素（スクリプト名）を取り除く
         array_shift($argv);
 
-        // obtiene el nombre de consola
+        // コンソール名を取得
         $console_name = array_shift($argv);
         if (!$console_name) {
-            throw new KumbiaException('No ha indicado la consola a ejecutar');
+            throw new KumbiaException('実行するコンソールが指定されていません');
         }
 
-        // obtiene el nombre de comando a ejecutar
+        // 実行するコマンド名を取得（省略時は main）
         $command = array_shift($argv);
         if (!$command) {
             $command = 'main';
         }
 
-        // Obtiene los argumentos para la consola, el primer argumento
-        // es el array de parametros nombrados para terminal
+        // コンソール用の引数リストを取得
+        // 最初の要素は名前付きパラメータ配列
         $args = self::_getConsoleArgs($argv);
 
-        // verifica el path de aplicacion
+        // アプリケーションパスを確認
         if (isset($args[0]['path'])) {
             $dir = realpath($args[0]['path']);
             if (!$dir) {
-                throw new KumbiaException("La ruta \"{$args[0]['path']}\" es invalida");
+                throw new KumbiaException("パス \"{$args[0]['path']}\" は無効です");
             }
-            // elimina el parametro path del array
+            // path パラメータを配列から削除
             unset($args[0]['path']);
         } else {
-            // obtiene el directorio de trabajo actual
+            // カレントディレクトリを取得
             $dir = getcwd();
         }
 
-        // define el path de la aplicacion
+        // アプリケーションのパスを定義
         define('APP_PATH', rtrim($dir, '/') . '/');
 
-        // lee la configuracion
+        // 設定ファイルを読み込む
         $config = Config::read('config');
 
-        // constante que indica si la aplicacion se encuentra en produccion
+        // アプリケーションが本番環境かどうかを示す定数
         define('PRODUCTION', $config['application']['production']);
 
-        // crea la consola
+        // コンソールインスタンスを生成
         $console = self::load($console_name);
 
-        // verifica que exista el comando en la consola
+        // コンソールにコマンドが定義されているか確認
         if (!method_exists($console, $command)) {
-            throw new KumbiaException("El comando \"$command\" no existe para la consola \"$console_name\"");
+            throw new KumbiaException("コマンド \"$command\" はコンソール \"$console_name\" に存在しません");
         }
 
-        // si se intenta ejecutar
+        // initialize コマンドの実行は禁止（予約コマンド）
         if ($command == 'initialize') {
-            throw new KumbiaException("El comando initialize es un comando reservado");
+            throw new KumbiaException('initialize コマンドは予約されており、直接実行はできません');
         }
 
-        // verifica los parametros para la accion de consola
+        // コンソールアクションのパラメータ数を検証
         $reflectionMethod = new ReflectionMethod($console, $command);
         if (count($args) < $reflectionMethod->getNumberOfRequiredParameters()) {
-            throw new KumbiaException("Número de parametros erroneo para ejecutar el comando \"$command\" en la consola \"$console_name\"");
+            throw new KumbiaException("コンソール \"$console_name\" のコマンド \"$command\" を実行するためのパラメータ数が不正です");
         }
 
-        // ejecuta el comando
+        // コマンドを実行
         call_user_func_array(array($console, $command), $args);
     }
 
     /**
-     * Lee un dato de entrada desde la consola
+     * コンソールから標準入力を 1 行読み取る
      *
-     * @param string $message mensaje a mostrar
-     * @param array $values array de valores validos para entrada
-     * @return string Valor leido desde la consola
-     * */
+     * @param string $message 表示するメッセージ
+     * @param array  $values  許可する入力値の配列（null の場合は何でも可）
+     * @return string コンソールから読み取った値
+     */
     public static function input($message, $values = null)
     {
-        // abre la entrada
+        // 標準入力を開く
         $stdin = fopen('php://stdin', 'r');
 
         do {
-            // imprime el mensaje
+            // メッセージを表示
             echo $message;
 
-            // lee la linea desde el terminal
+            // ターミナルから 1 行読み取る
             $data = str_replace(PHP_EOL, '', fgets($stdin));
         } while ($values && !in_array($data, $values));
 
-        // cierra el recurso
+        // リソースをクローズ
         fclose($stdin);
 
         return $data;

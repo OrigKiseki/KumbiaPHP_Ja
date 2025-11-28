@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -15,7 +15,7 @@
  */
 
 /**
- * Helper que utiliza Ajax
+ * Ajax を利用するヘルパークラス
  *
  * @category   KumbiaPHP
  * @package    Helpers
@@ -24,13 +24,13 @@ class Ajax
 {
 
     /**
-     * Crea un enlace en una Aplicacion actualizando la capa con ajax
+     * 指定したアクションへのリンクを生成し、Ajax で指定の要素を更新します
      *
-     * @param string $action ruta a la accion
-     * @param string $text texto a mostrar
-     * @param string $update capa a actualizar
-     * @param string $class clases adicionales
-     * @param string|array $attrs atributos adicionales
+     * @param string       $action アクションへのパス
+     * @param string       $text   表示するテキスト
+     * @param string       $update 更新対象の要素（ID など）
+     * @param string       $class  追加するクラス
+     * @param string|array $attrs  追加の属性
      * @return string
      */
     public static function link($action, $text, $update, $class = '', $attrs = '')
@@ -40,13 +40,14 @@ class Ajax
     }
 
     /**
-     * Crea un enlace a una acción actualizando la capa con ajax
+     * 現在のコントローラー内のアクションへのリンクを生成し、
+     * Ajax で指定の要素を更新します
      *
-     * @param string $action ruta a la accion
-     * @param string $text texto a mostrar
-     * @param string $update capa a actualizar
-     * @param string $class clases adicionales
-     * @param string|array $attrs atributos adicionales
+     * @param string       $action アクションへのパス（コントローラー相対）
+     * @param string       $text   表示するテキスト
+     * @param string       $update 更新対象の要素（ID など）
+     * @param string       $class  追加するクラス
+     * @param string|array $attrs  追加の属性
      * @return string
      */
     public static function linkAction($action, $text, $update, $class = '', $attrs = '')
@@ -56,15 +57,14 @@ class Ajax
     }
 
     /**
-     * Crea un enlace en una Aplicacion actualizando la capa con ajax con mensaje
-     * de confirmacion
+     * 確認メッセージ付きで、Ajax により要素を更新するリンクを生成します
      *
-     * @param string $action ruta a la accion
-     * @param string $text texto a mostrar
-     * @param string $update capa a actualizar
-     * @param string $confirm mensaje de confirmacion
-     * @param string $class clases adicionales
-     * @param string|array $attrs atributos adicionales
+     * @param string       $action  アクションへのパス
+     * @param string       $text    表示するテキスト
+     * @param string       $update  更新対象の要素（ID など）
+     * @param string       $confirm 確認メッセージ
+     * @param string       $class   追加するクラス
+     * @param string|array $attrs   追加の属性
      * @return string
      */
     public static function linkConfirm($action, $text, $update, $confirm, $class = '', $attrs = '')
@@ -74,15 +74,15 @@ class Ajax
     }
 
     /**
-     * Crea un enlace a una acción actualizando la capa con ajax con mensaje
-     * de confirmacion
+     * 確認メッセージ付きで、現在のコントローラー内のアクションへのリンクを生成し、
+     * Ajax により要素を更新します
      *
-     * @param string $action ruta a la accion
-     * @param string $text texto a mostrar
-     * @param string $update capa a actualizar
-     * @param string $confirm mensaje de confirmacion
-     * @param string $class clases adicionales
-     * @param string|array $attrs atributos adicionales
+     * @param string       $action  アクションへのパス（コントローラー相対）
+     * @param string       $text    表示するテキスト
+     * @param string       $update  更新対象の要素（ID など）
+     * @param string       $confirm 確認メッセージ
+     * @param string       $class   追加するクラス
+     * @param string|array $attrs   追加の属性
      * @return string
      */
     public static function linkActionConfirm($action, $text, $update, $confirm, $class = '', $attrs = '')
@@ -92,59 +92,59 @@ class Ajax
     }
 
     /**
-     * Lista desplegable para actualizar usando ajax
+     * Ajax で更新を行うセレクトボックスを生成します
      *
-     * @param string $field nombre de campo
-     * @param array $data
-     * @param string $update capa que se actualizara
-     * @param string $action accion que se ejecutara
-     * @param string $class
-     * @param string|array $attrs
+     * @param string       $field  フィールド名
+     * @param array        $data   選択肢データ
+     * @param string       $update 更新対象の要素（ID など）
+     * @param string       $action 実行するアクション
+     * @param string       $class  追加するクラス
+     * @param string|array $attrs  追加の属性
      */
     public static function select($field, $data, $update, $action, $class = '', $attrs = '')
     {
         $attrs = Tag::getAttrs($attrs);
-        // ruta a la accion
+        // アクションへのパス
         $action = PUBLIC_PATH . rtrim($action, '/') . '/';
-        // genera el campo
+        // セレクト要素を生成
         return Form::select($field, $data, "class=\"js-remote $class\" data-update=\"$update\" data-url=\"$action\" $attrs");
     }
 
     /**
-     * Lista desplegable para actualizar usando ajax que toma los valores de un array de objetos
+     * オブジェクト配列から値を取得し、Ajax で更新を行うセレクトボックスを生成します
      *
-     * @param string $field nombre de campo
-     * @param string $show campo que se mostrara
-     * @param array  $data Array('modelo','metodo','param')
-     * @param string $update capa que se actualizara
-     * @param string $action accion que se ejecutara
-     * @param string $blank campo en blanco
-     * @param string $class
-     * @param string|array $attrs
+     * @param string       $field  フィールド名
+     * @param string       $show   表示に使用するフィールド名
+     * @param array        $data   Array('modelo','metodo','param') 形式の配列
+     * @param string       $update 更新対象の要素（ID など）
+     * @param string       $action 実行するアクション
+     * @param string       $blank  空行（ブランク）を表示する場合のラベル
+     * @param string       $class  追加するクラス
+     * @param string|array $attrs  追加の属性
      */
     public static function dbSelect($field, $show, $data, $update, $action, $blank=null, $class = '', $attrs = '')
     {
         $attrs = Tag::getAttrs($attrs);
-        // ruta a la accion
+        // アクションへのパス
         $action = PUBLIC_PATH . rtrim($action, '/') . '/';
 
-        // genera el campo
+        // セレクト要素を生成
         return Form::dbSelect($field, $show, $data, $blank, "class=\"js-remote $class\" data-update=\"$update\" data-url=\"$action\" $attrs");
     }
 
     /**
-     * Genera un formulario Ajax
+     * Ajax 送信を行うフォームを生成します
      *
-     * @param string $update capa que se actualizara
-     * @param string $action accion a ejecutar
-     * @param string $class clase de estilo
-     * @param string $method metodo de envio
-     * @param string|array $attrs atributos
+     * @param string       $update 更新対象の要素（ID など）
+     * @param string       $action 実行するアクション
+     * @param string       $class  スタイル用クラス
+     * @param string       $method 送信メソッド（GET / POST）
+     * @param string|array $attrs  追加の属性
      * @return string
      */
     public static function form($update, $action = '', $class = '', $method = 'post', $attrs = '')
     {
-        $attrs = "class=\"js-remote $class\" data-to=\"$update\" ".Tag::getAttrs($attrs);
+        $attrs = "class=\"js-remote $class\" data-to=\"$update\" " . Tag::getAttrs($attrs);
         return Form::open($action, $method, $attrs);
     }
 

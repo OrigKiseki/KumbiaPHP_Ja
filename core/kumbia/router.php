@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Router
@@ -15,11 +15,11 @@
  */
 
 /**
- * Clase que Actua como router del Front-Controller
+ * フロントコントローラ用ルータークラス
  *
- * Manejo de redirecciones de peticiones
- * Contiene información referente a la url de
- * la petición ( modudo, controlador, acción, parametros, etc )
+ * リクエストのルーティング（振り分け）を行います。
+ * リクエストされた URL に関する情報
+ * （モジュール、コントローラ、アクション、パラメータ等）を保持します。
  *
  * @category   Kumbia
  * @package    Router
@@ -28,147 +28,152 @@ class Router
 {
 
     /**
-     * Array estático con las variables del router
+     * ルーターの各種情報を格納する静的配列
      *
      * @var array
      */
     protected static $vars = [
-        // 'method'          => '', //Método usado GET, POST, ...
-        // 'route'           => '', //Ruta pasada URL
-        // 'module'          => '', //Nombre del módulo actual
-        // 'controller'      => 'index', //Nombre del controlador actual
-        // 'action'          => 'index', //Nombre de la acción actual, por defecto index
-        // 'parameters'      => [], //Lista los parámetros adicionales de la URL
-        // 'controller_path' => 'index'
+        // 'method'          => '',      // 使用された HTTP メソッド (GET, POST, ...)
+        // 'route'           => '',      // URL から渡されたルート
+        // 'module'          => '',      // 現在のモジュール名
+        // 'controller'      => 'index', // 現在のコントローラ名（デフォルト: index）
+        // 'action'          => 'index', // 現在のアクション名（デフォルト: index）
+        // 'parameters'      => [],      // URL の追加パラメータ一覧
+        // 'controller_path' => 'index'  // コントローラのパス
     ];
 
     /**
-     * Array estático con las variables del router por defecto
-     * TODO: Convertir a constante
-     * 
+     * ルーターのデフォルト値を格納する静的配列
+     * TODO: 定数化する
+     *
      * @var array
      */
     protected static $default = [
-        'module'          => '', //Nombre del módulo actual
-        'controller'      => 'index', //Nombre del controlador actual, por defecto index
-        'action'          => 'index', //Nombre de la acción actual, por defecto index
-        'parameters'      => [], //Lista los parámetros adicionales de la URL
-        'controller_path' => 'index'
+        'module'          => '',       // 現在のモジュール名
+        'controller'      => 'index',  // 現在のコントローラ名（デフォルト: index）
+        'action'          => 'index',  // 現在のアクション名（デフォルト: index）
+        'parameters'      => [],       // URL の追加パラメータ一覧
+        'controller_path' => 'index'   // コントローラのパス
     ];
 
     /**
-     * This is the name of router class
+     * 使用するルータクラス名
      * @var string
      */
     protected static $router = 'KumbiaRouter';
-    //Es el router por defecto
+    // デフォルトのルータクラス
 
     /**
-     * Indica si esta pendiente la ejecución de una ruta por parte del dispatcher
+     * Dispatcher によるルート実行が保留されているかどうか
      *
      * @var boolean
      */
     protected static $routed = false;
 
     /**
-     * Procesamiento basico del router
+     * ルーターの基本的な初期処理
+     *
      * @param string $url
-     * 
+     *
      * @throws KumbiaException
      * @return void
      */
     public static function init($url)
     {
-        // Se miran los parámetros por seguridad
+        // セキュリティ上の確認（ディレクトリトラバーサル等の簡易チェック）
         if (stripos($url, '/../') !== false) {
-            throw new KumbiaException("Posible intento de hack en URL: '$url'");
+            throw new KumbiaException("URL に対する不正アクセスの可能性があります: '$url'");
         }
-        // Si hay intento de hack TODO: añadir la ip y referer en el log
+        // TODO: 不正アクセスの可能性があれば IP や Referer をログに残す
         self::$default['route'] = $url;
-        //Método usado
+        // 使用された HTTP メソッド
         self::$default['method'] = $_SERVER['REQUEST_METHOD'];
     }
 
     /**
-     * Ejecuta una url
+     * 指定された URL を実行する
      *
      * @param string $url
-     * 
+     *
      * @throws KumbiaException
      * @return Controller
      */
     public static function execute($url)
     {
         self::init($url);
-        //alias
+        // エイリアスとしてルータクラス名を取得
         $router = self::$router;
         $conf   = Config::get('config.application.routes');
-        //Si config.ini tiene routes activados, mira si esta routed
+
+        // config.ini で routes が有効になっている場合はルーティングを確認
         if ($conf) {
-            /*Esta activado el router*/
-            /* This if for back compatibility*/
+            /* ルータが有効 */
+            /* 古いバージョンとの互換性のための処理 */
             if ($conf === '1') {
                 $url = $router::ifRouted($url);
             } else {
-                /*Es otra clase de router*/
+                /* 別のルータクラスが指定されている場合 */
                 $router = self::$router = $conf;
             }
         }
 
-        // Descompone la url
+        // URL を分解してルーティング情報に変換
         self::$vars = $router::rewrite($url) + self::$default;
 
-        // Despacha la ruta actual
+        // 現在のルートをディスパッチ
         return static::dispatch($router::getController(self::$vars));
     }
 
     /**
-     * Realiza el dispatch de la ruta actual
-     * 
-     * @param Controller $cont  Controlador a usar
+     * 現在のルートをディスパッチ（実行）する
+     *
+     * @param Controller $cont  実行対象のコントローラ
      *
      * @throws KumbiaException
      * @return Controller
      */
     protected static function dispatch($cont)
     {
-        // Se ejecutan los filtros initialize y before
+        // initialize と before_filter を実行
         if ($cont->k_callback(true) === false) {
             return $cont;
         }
 
         if (method_exists($cont, $cont->action_name)) {
-            if (strcasecmp($cont->action_name, 'k_callback') === 0 ) {
-                throw new KumbiaException('Esta intentando ejecutar un método reservado de KumbiaPHP');
+            // 予約メソッド k_callback を直接実行しようとした場合はエラー
+            if (strcasecmp($cont->action_name, 'k_callback') === 0) {
+                throw new KumbiaException('KumbiaPHP の予約メソッドを実行しようとしています');
             }
 
-            if ($cont->limit_params) { // with variadic php5.6 delete it
+            // PHP 5.6 の可変長引数導入後は削除可能
+            if ($cont->limit_params) {
                 $reflectionMethod = new ReflectionMethod($cont, $cont->action_name);
                 $num_params = count($cont->parameters);
-                
+
                 if ($num_params < $reflectionMethod->getNumberOfRequiredParameters() ||
                     $num_params > $reflectionMethod->getNumberOfParameters()) {
-                        
+
+                    // パラメータ数エラー（メッセージはビュー側で処理）
                     throw new KumbiaException('', 'num_params');   
                 }
-                        
             }
         }
-        
+
+        // 対象アクションを実行
         call_user_func_array([$cont, $cont->action_name], $cont->parameters);
 
-        //Corre los filtros after y finalize
+        // after_filter と finalize を実行
         $cont->k_callback();
 
-        //Si esta routed internamente volver a ejecutar
+        // 内部ルーティングが設定されている場合は再度実行
         self::isRouted();
 
         return $cont;
     }
 
     /**
-     * Redirecciona la ejecución internamente
-     * 
+     * 内部ルーティングをトリガーする
+     *
      * @throws KumbiaException
      * @return void
      */
@@ -177,23 +182,24 @@ class Router
         if (self::$routed) {
             self::$routed = false;
             $router = self::$router;
-            // Despacha la ruta actual
+            // 現在のルートを再ディスパッチ
             self::dispatch($router::getController(self::$vars));
         }
     }
 
     /**
-     * Envia el valor de un atributo o el array con todos los atributos y sus valores del router
-     * Mirar el atributo vars del router
-     * ej.
-     * <code>Router::get()</code>
+     * ルーターの属性値、またはすべての属性配列を取得する
      *
-     * ej.
-     * <code>Router::get('controller')</code>
+     * 使用例:
+     * <code>Router::get()</code>  // すべての情報を取得
      *
-     * @param string $var (opcional) un atributo: route, module, controller, action, parameters o routed
-     * 
-     * @return array|string con el valor del atributo
+     * 使用例:
+     * <code>Router::get('controller')</code>  // コントローラ名のみ取得
+     *
+     * @param string $var (任意) 取得したい属性名:
+     *                     route, module, controller, action, parameters, routed 等
+     *
+     * @return array|string 指定した属性の値、またはすべての属性配列
      */
     public static function get($var = '')
     {
@@ -201,11 +207,11 @@ class Router
     }
 
     /**
-     * Redirecciona la ejecución internamente o externamente con un routes propio
+     * 内部、または外部からルーティング情報を上書きする
      *
-     * @param array $params array de $vars (móddulo, controller, action, params, ...)
-     * @param boolean $intern si la redirección es interna
-     * 
+     * @param array   $params $vars と同形式の配列（module, controller, action, params など）
+     * @param boolean $intern 内部リダイレクトかどうか
+     *
      * @return void
      */
     public static function to(array $params, $intern = false)

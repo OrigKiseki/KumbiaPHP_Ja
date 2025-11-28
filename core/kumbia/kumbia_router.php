@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    KumbiaRouter
@@ -18,73 +18,73 @@ class KumbiaRouter
 {
 
     /**
-     * Toma $url y la descompone en (modulo), controlador, accion y argumentos
+     * 渡された $url を (モジュール), コントローラ, アクション, 引数 に分解する
      *
      * @param string $url
-     * @return  array
+     * @return array
      */
     public static function rewrite(string $url): array
     {
         $router = [];
-        //Valor por defecto
+        // デフォルト値
         if ($url === '/') {
             return $router;
         }
 
-        //Se limpia la url, en caso de que la hallan escrito con el último parámetro sin valor, es decir controller/action/
-        // Obtiene y asigna todos los parámetros de la url
+        // URL の末尾が controller/action/ のように値なしで終わっている場合なども含めてトリムして分割する
+        // URL のすべてのパラメータを取得して配列に格納
         $urlItems = explode('/', trim($url, '/'));
 
-        // El primer parámetro de la url es un módulo?
+        // URL の最初の要素はモジュールか？
         if (is_dir(APP_PATH."controllers/$urlItems[0]")) {
             $router['module'] = $urlItems[0];
 
-            // Si no hay más parámetros sale
+            // これ以上パラメータがない場合はここで終了
             if (next($urlItems) === false) {
                 $router['controller_path'] = "$urlItems[0]/index";
                 return $router;
             }
         }
 
-        // Controlador, cambia - por _
+        // コントローラ名（ハイフンをアンダースコアへ変換）
         $router['controller']      = str_replace('-', '_', current($urlItems));
         $router['controller_path'] = isset($router['module']) ? "$urlItems[0]/".$router['controller'] : $router['controller'];
 
-        // Si no hay más parámetros sale
+        // これ以上パラメータがない場合はここで終了
         if (next($urlItems) === false) {
             return $router;
         }
 
-        // Acción
+        // アクション名
         $router['action'] = current($urlItems);
 
-        // Si no hay más parámetros sale
+        // これ以上パラメータがない場合はここで終了
         if (next($urlItems) === false) {
             return $router;
         }
 
-        // Crea los parámetros y los pasa
+        // 残りをパラメータとして扱う
         $router['parameters'] = array_slice($urlItems, key($urlItems));
         return $router;
     }
 
     /**
-     * Busca en la tabla de entutamiento si hay una ruta en config/routes.ini
-     * para el controlador, accion, id actual
+     * config/routes.ini に定義されたルーティングテーブルを参照し、
+     * 現在のコントローラ・アクション・ID に対応するルートがあるかを検索する
      *
-     * @param string $url Url para enrutar
-     * @return string
+     * @param string $url ルーティング対象の URL
+     * @return string 変換後の URL
      */
     public static function ifRouted(string $url): string
     {
         $routes = Config::get('routes.routes');
 
-        // Si existe una ruta exacta la devuelve
+        // 完全一致するルートがあればそれを返す
         if (isset($routes[$url])) {
             return $routes[$url];
         }
 
-        // Si existe una ruta con el comodín * crea la nueva ruta
+        // ワイルドカード * を含むルート定義があれば、それを使って新しいルートを生成
         foreach ($routes as $key => $val) {
             if ($key === '/*') {
                 return rtrim($val, '*').$url;
@@ -101,20 +101,22 @@ class KumbiaRouter
     }
 
     /**
-     * Carga y devuelve una instancia del controllador
+     * コントローラファイルを読み込み、インスタンスを生成して返す
      * 
-     * @throws KumbiaException
+     * @param array $params ルーターで解析されたパラメータ
+     * 
+     * @throws KumbiaException コントローラが存在しない場合
      * 
      * @return Controller
      */
     public static function getController(array $params): Controller
     {
         if (!include_once APP_PATH."controllers/{$params['controller_path']}_controller.php") {
-            // Extrae las variables para manipularlas facilmente
+            // 変数を展開して扱いやすくする
             extract($params, EXTR_OVERWRITE);
             throw new KumbiaException('', 'no_controller');
         }
-        //Asigna el controlador activo
+        // アクティブなコントローラ名を決定
         $controller = Util::camelcase($params['controller']).'Controller';
         return new $controller($params);
     }

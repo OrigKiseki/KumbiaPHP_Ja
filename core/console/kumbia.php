@@ -1,11 +1,11 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP Web & アプリケーションフレームワーク
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載の
+ * New BSD License の条件に従います。
  *
  * @category   Kumbia
  * @package    Console
@@ -15,18 +15,20 @@
  */
 
 /**
- * Script para consolas de KumbiaPHP
+ * KumbiaPHP 用コンソールスクリプト
  *
  * @category   Kumbia
  * @package    Console
  */
-// Define el CORE_PATH
+// CORE_PATH を定義（フレームワークのコアディレクトリ）
 define('CORE_PATH', dirname(__DIR__) . '/');
 
 /**
+ * コンソールクラスを読み込み
+ *
  * @see Console
  */
 require CORE_PATH . 'kumbia/console.php';
 
-// Ejecuta el despachador
+// コンソールディスパッチャを実行
 Console::dispatch($argv);
