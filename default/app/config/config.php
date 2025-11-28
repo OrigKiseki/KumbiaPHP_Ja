@@ -44,6 +44,6 @@ return [
         /**
          * routes: routes.php のルーティング設定を有効にする場合はコメントを外す
          */
-        //'routes' => '1',
+        'routes' => '1',
     ],
 ];
