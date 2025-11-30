@@ -8,8 +8,10 @@
 
 日本語 | [スペイン語](README.SP.md) | [English](README.EN.md)
 
-かんたん・高速、そしてスペイン語のドキュメント
-（それとも “fast and easy” と言うべきでしょうか？）
+> こちらは KumbiaPHP の日本語化プロジェクトになります
+> [KumbiaPHP オリジナルプロジェクト](https://github.com/KumbiaPHP/KumbiaPHP)
+
+かんたん・高速な PHP フレームワーク
 
 ---
 
@@ -25,7 +27,8 @@ v1 用マニュアル（作成中）:
 
 ## KumbiaPHP の Slack チャンネル（スペイン語・英語）
 
-https://slack.kumbiaphp.com（新しい公式 Slack）
+https://slack.kumbiaphp.com
+（新しい公式 Slack）
 
 ## 独立ベンチマークで最速クラスと評価された PHP フレームワーク
 
@@ -48,6 +51,14 @@ https://www.techempower.com/benchmarks/#section=data-r18&hw=ph&test=fortune&l=zi
 -   https://www.facebook.com/kumbia.fw/ Facebook ページ
 -   https://slack.kumbiaphp.com Slack（新しく推奨のチャネル）
 -   これまでに、cvs(sf.net)、svn(sf.net)、bzr(launchpad.com)、そして現在の git(github.com) と、長いリポジトリの歴史があります
+
+# 翻訳履歴（Translate Log）
+
+## 未翻訳内容 (To do)
+
+- core/libs/*
+
+> core/libs/acl/*, core/libs/acl2/* は翻訳済み
 
 # ライセンス
 
