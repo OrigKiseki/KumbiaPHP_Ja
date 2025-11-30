@@ -9,9 +9,12 @@
 日本語 | [スペイン語](README.SP.md) | [English](README.EN.md)
 
 > こちらは KumbiaPHP の日本語化プロジェクトになります
+
 > [KumbiaPHP オリジナルプロジェクト](https://github.com/KumbiaPHP/KumbiaPHP)
 
-かんたん・高速な PHP フレームワーク
+> v1.2.1 master > 91793fb からクローンして翻訳したもの
+
+高速・簡単な PHP フレームワーク
 
 ---
 
