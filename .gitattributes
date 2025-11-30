@@ -1,13 +1,13 @@
-# Auto detect text files and perform LF normalization
+# テキストファイルを自動検出し、LF 改行に正規化する
 * text=auto
 
-# JSON files.
+# JSON ファイル（LF 改行を強制）
 *.json text eol=lf
 
-# Custom for Visual Studio
+# Visual Studio 用のカスタム設定（C# 用 diff ドライバ）
 *.cs     diff=csharp
 
-# Standard to msysgit
+# msysgit 標準の設定（Office / PDF / RTF をプレーンテキストとして diff）
 *.doc	 diff=astextplain
 *.DOC	 diff=astextplain
 *.docx diff=astextplain

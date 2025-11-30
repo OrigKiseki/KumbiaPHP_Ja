@@ -35,7 +35,7 @@ class Css
      * @var array
      */
     protected static $_css = array();
-    
+
     /**
      * CSS ディレクトリ
      *

@@ -79,7 +79,7 @@ class CacheConsole
     {
         if (isset($params['driver'])) {
             return Cache::driver($params['driver']);
-        } 
+        }
         return Cache::driver();
 
     }

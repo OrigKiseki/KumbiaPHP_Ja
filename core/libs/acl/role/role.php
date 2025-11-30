@@ -4,22 +4,22 @@
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載された
+ * New BSD ライセンスの条件に従います。
  *
- * @category   Kumbia
- * @package    Acl
- * @subpackage AclRole
+ * @category   Kumbia        フレームワーク本体
+ * @package    Acl           アクセス制御 (ACL)
+ * @subpackage AclRole       ACL ロール
  *
- * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
+ * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
 
 /**
- * Clase para la creación de Roles ACL
+ * ACL ロール作成用クラス
  *
- * Esta clase define los roles y parametros
- * de cada uno
+ * このクラスは ACL のロールと、
+ * それぞれのパラメータを定義します。
  *
  * @category   Kumbia
  * @package    Acl
@@ -29,30 +29,31 @@ class AclRole
 {
 
     /**
-     * Nombre del Rol
+     * ロール名
      *
      * @var string
      */
     public $name;
 
     /**
-     * Constructor de la clase Rol
+     * コンストラクタ
      *
-     * @param string $name
+     * @param string $name ロール名
      */
     public function __construct($name)
     {
         if ($name == '*') {
-            throw new KumbiaException('Nombre invalido "*" para nombre de Rol en Acl_Role::__constuct');
+            // "*" は ACL ロール名として無効
+            throw new KumbiaException('ACL ロール Acl_Role::__constuct において、"*" は無効な名前です');
         }
         $this->name = $name;
     }
 
     /**
-     * Impide que le cambien el nombre al Rol en el Objeto
+     * オブジェクトの name プロパティ名を書き換えられないようにする
      *
-     * @param string $name
-     * @param string $value
+     * @param string $name  プロパティ名
+     * @param string $value 値
      */
     public function __set($name, $value)
     {

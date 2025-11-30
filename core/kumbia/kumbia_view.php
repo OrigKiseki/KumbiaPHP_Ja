@@ -94,7 +94,7 @@ class KumbiaView
      *
      * @param string|null $view     利用するビュー名（拡張子 .phtml は不要）
      * @param string|null $template 利用するテンプレート名（拡張子 .phtml は不要）
-     * 
+     *
      * @return void
      */
     public static function select($view, $template = '')
@@ -111,7 +111,7 @@ class KumbiaView
      * ビューで使用するテンプレートを設定する
      *
      * @param string|null $template 利用するテンプレート名（拡張子 .phtml は不要）
-     * 
+     *
      * @return void
      */
     public static function template($template)
@@ -127,7 +127,7 @@ class KumbiaView
      *
      * @param string      $response レスポンス種別
      * @param string|null $template 任意のテンプレート名（拡張子 .phtml なし）
-     * 
+     *
      * @return void
      */
     public static function response($response, $template = null)
@@ -144,7 +144,7 @@ class KumbiaView
      * ビューのパスを設定する
      *
      * @param string $path 拡張子 .phtml を除いたビューのパス
-     * 
+     *
      * @return void
      */
     public static function setPath($path)
@@ -170,7 +170,7 @@ class KumbiaView
      * KumbiaView の属性値を取得する
      *
      * @param string $atribute 属性名（template, response, path など）
-     * 
+     *
      * @return mixed
      */
     public static function get($atribute)
@@ -236,7 +236,7 @@ class KumbiaView
      * ビューまたはテンプレートをキャッシュに保存する
      *
      * @param string $type view または template
-     * 
+     *
      * @return void
      */
     protected static function saveCache($type)
@@ -251,7 +251,7 @@ class KumbiaView
      * ビューをレンダリングする
      *
      * @param Controller $controller 現在のコントローラインスタンス
-     * 
+     *
      * @return void
      */
     public static function render(Controller $controller)
@@ -259,7 +259,7 @@ class KumbiaView
         if (!self::$_view && !self::$_template) {
             ob_end_flush();
 
-            return; 
+            return;
         }
 
         // コントローラのプロパティを保存し、それを元に出力を生成
@@ -270,7 +270,7 @@ class KumbiaView
      * ビューの生成処理
      *
      * @param array $controller コントローラのプロパティ配列
-     * 
+     *
      * @return void
      */
     protected static function generate($controller)
@@ -327,7 +327,7 @@ class KumbiaView
 
     /**
      * バッファされたコンテンツを出力する
-     * 
+     *
      * @return void
      */
     public static function content()

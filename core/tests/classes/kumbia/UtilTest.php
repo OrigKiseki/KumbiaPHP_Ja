@@ -4,24 +4,31 @@
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載された
+ * New BSD ライセンスの条件に従います。
  *
- * @category   Test
- * @package    Core
+ * @category   Test        テスト
+ * @package    Core        コアユーティリティ
  *
- * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
+ * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
 
 /**
+ * Util クラスのテスト
+ *
  * @category    Test
  * @package     Core
  *
- * @runTestsInSeparateProcesses
+ * @runTestsInSeparateProcesses  テストを個別プロセスで実行
  */
 class UtilTest extends PHPUnit\Framework\TestCase
 {
+    /**
+     * Util::underscore() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function underescoreDataProvider()
     {
         return array(
@@ -38,6 +45,11 @@ class UtilTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Util::dash() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function dashDataProvider()
     {
         return array(
@@ -55,6 +67,11 @@ class UtilTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Util::humanize() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function humanizeDataProvider()
     {
         return array(
@@ -74,6 +91,11 @@ class UtilTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Util::encomillar() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function encomillarDataProvider()
     {
         return array(
@@ -84,6 +106,11 @@ class UtilTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Util::camelcase() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function camelcaseDataProvider()
     {
         return array(
@@ -105,6 +132,11 @@ class UtilTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Util::smallcase() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function smallcaseDataProvider()
     {
         return array(
@@ -118,6 +150,11 @@ class UtilTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Util::getParams() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function getParamsDataProvider()
     {
         return array(
@@ -141,6 +178,7 @@ class UtilTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider underescoreDataProvider
+     * Util::underscore() の変換結果を検証
      */
     public function testUnderescore($original, $expected)
     {
@@ -151,6 +189,7 @@ class UtilTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider dashDataProvider
+     * Util::dash() の変換結果を検証
      */
     public function testDash($original, $expected)
     {
@@ -161,6 +200,7 @@ class UtilTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider humanizeDataProvider
+     * Util::humanize() の変換結果を検証
      */
     public function testHumanize($original, $expected)
     {
@@ -171,6 +211,7 @@ class UtilTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider encomillarDataProvider
+     * Util::encomillar() の変換結果を検証
      */
     public function testEncomillar($original, $expected)
     {
@@ -181,6 +222,7 @@ class UtilTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider camelcaseDataProvider
+     * Util::camelcase() の CamelCase / camelCase 変換を検証
      */
     public function testCamelcase($original, $expected, $expectedLowerCase)
     {
@@ -193,6 +235,7 @@ class UtilTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider smallcaseDataProvider
+     * Util::smallcase() の変換結果を検証
      */
     public function testSmallcase($original, $expected)
     {
@@ -203,6 +246,7 @@ class UtilTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getParamsDataProvider
+     * Util::getParams() の結果を検証
      */
     public function testGetParams($original, $expected)
     {

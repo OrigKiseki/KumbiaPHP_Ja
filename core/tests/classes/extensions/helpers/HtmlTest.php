@@ -4,39 +4,49 @@
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載された
+ * New BSD ライセンスの条件に従います。
  *
- * @category   Test
- * @package    Html
+ * @category   Test        テスト
+ * @package    Html        Html ヘルパー
  *
- * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
+ * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
 
 use \Mockery as m;
 
 /**
+ * Html クラスのテスト
+ *
  * @category Test
  * @package  Html
- *  
- * @runTestsInSeparateProcesses
+ *
+ * @runTestsInSeparateProcesses  テストごとに別プロセスで実行
  */
 class HtmlTest extends PHPUnit\Framework\TestCase
 {
     //use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
+    /**
+     * 各テストの後処理
+     */
     protected function tearDown(): void
     {
         /*
-         * Cuando se ejecutan los procesos por separado (@runTestsInSeparateProcesses)
-         * es recomendado cerrar Mockery en el tearDown
+         * テストを別プロセスで実行する (@runTestsInSeparateProcesses) 場合、
+         * tearDown で Mockery を明示的に閉じることが推奨されている。
          *
          * http://docs.mockery.io/en/latest/reference/phpunit_integration.html#phpunit-integration
          */
         m::close();
     }
 
+    /**
+     * Html::img() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function imgDataProvider()
     {
         return array(
@@ -63,6 +73,7 @@ class HtmlTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider imgDataProvider
+     * Html::img() の出力が期待通りかを検証
      */
     public function testImg($img, $alt, $attrs, $expected)
     {
@@ -72,6 +83,9 @@ class HtmlTest extends PHPUnit\Framework\TestCase
         $this->assertSame($expected, Html::img($img, $alt, $attrs[0]));
     }
 
+    /**
+     * Html::img() の alt が省略されたときのデフォルト値を検証
+     */
     public function testImgDefaultAlt()
     {
         //$tagMock = m::mock('alias:Tag');
@@ -81,6 +95,9 @@ class HtmlTest extends PHPUnit\Framework\TestCase
         $this->assertSame($expected, Html::img('img.png'));
     }
 
+    /**
+     * Html::link() の基本的な動作を検証
+     */
     public function testLink()
     {
         //$tagMock = m::mock('alias:Tag');
@@ -97,6 +114,9 @@ class HtmlTest extends PHPUnit\Framework\TestCase
         $this->assertSame($expected, Html::link('action-name', 'Action name', array('a' => 'b', 'c' => 'd')));
     }
 
+    /**
+     * Html::link() 属性なし／文字列属性での動作を検証
+     */
     public function testLinkWithoutAttrs()
     {
         //$tagMock = m::mock('alias:Tag');
@@ -109,18 +129,26 @@ class HtmlTest extends PHPUnit\Framework\TestCase
         $this->assertSame($expected, Html::link('action-name', 'Action name', 'a="b"'));
     }
 
+    /**
+     * Html::link() 属性が配列で渡されたときの動作を検証
+     */
     public function testLinkWithAttrsAsArray()
     {
         $expected = sprintf('<a href="%saction-name" >Action name</a>', PUBLIC_PATH);
         Html::link('action-name', 'Action name', array());
-        
+
         $expected = sprintf('<a href="%saction-name" a="b">Action name</a>', PUBLIC_PATH);
         $this->assertSame($expected, Html::link('action-name', 'Action name', array('a' => 'b')));
-        
+
         $expected = sprintf('<a href="%saction-name" a="b" c="d">Action name</a>', PUBLIC_PATH);
         $this->assertSame($expected, Html::link('action-name', 'Action name', array('a' => 'b', 'c' => 'd')));
     }
 
+    /**
+     * linkAction 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function linkActionDataProvider()
     {
         return array(
@@ -133,6 +161,7 @@ class HtmlTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider linkActionDataProvider
+     * Html::linkAction() が正しい href パターンを生成するか検証
      */
     public function testLinkActionHrefPattern($action, $controllerPath, $expected)
     {
@@ -147,6 +176,9 @@ class HtmlTest extends PHPUnit\Framework\TestCase
         $this->assertStringContainsString($expected, $link);
     }
 
+    /**
+     * Html::linkAction() の完全なリンク文字列を検証
+     */
     public function testLinkAction()
     {
         $routerMock = m::mock('alias:Router');

@@ -232,7 +232,7 @@ abstract class KumbiaRest extends Controller
      * @return \SimpleXMLElement|null
      */
     protected static function parseXML($input)
-    {    
+    {
         try {
             return new SimpleXMLElement($input);
         } catch (Exception $e) {

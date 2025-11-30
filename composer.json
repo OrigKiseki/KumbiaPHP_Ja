@@ -2,7 +2,7 @@
     "config": {
         "sort-packages": true
     },
-    "description": "The KumbiaPHP framework.",
+    "description": "KumbiaPHP フレームワーク（The KumbiaPHP framework.）",
     "homepage": "https://kumbiaphp.com",
     "license": "BSD-3-Clause",
     "name": "kumbia/framework",

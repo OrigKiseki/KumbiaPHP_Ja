@@ -4,15 +4,16 @@
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * 
- * Paginador "extended" para aplicaciones
+ * このソースファイルは、同梱の LICENSE ファイルに記載されている
+ * New BSD ライセンスに従います。
  *
- * Parametros del paginador:
- *   page: objeto obtenido al invocar al paginador
- *   url: url para la accion que efectua la paginacion, por defecto "module/controller/page/"
- *        y se envia por parametro el numero de pagina
+ * アプリケーション向け「extended」ページネーター
+ *
+ * ページネーターのパラメータ:
+ *   page: ページネーター呼び出しで取得したオブジェクト
+ *   url : ページングを行うアクションのURL。
+ *         デフォルトは "module/controller/page/" で、
+ *         ページ番号をパラメータとして送る。
  *
  * @category    Kumbia
  * @package     Partials
@@ -22,25 +23,51 @@
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
 
-if(!isset($url)) {
+// URL が指定されていない場合は Router から取得して組み立てる
+if (!isset($url)) {
     extract(Router::get());
     $url = "$controller/page";
-    if($module) {
+    if ($module) {
         $url = "$module/$url";
     }
 }
 
-$s_item = $page->per_page*($page->current-1) + 1;
+// 現在ページにおけるアイテムの開始番号と終了番号を計算
+$s_item = $page->per_page * ($page->current - 1) + 1;
 $e_item = $s_item + count($page->items) - 1;
 ?>
 
 <div class="paginator">
-    <?php if($page->prev==1) echo Html::link("$url/", 'Anterior', 'title="Ir a la pág. anterior" class="nextprev" rel="prev"'); // Se coloca el link sin número de página para la página 1
-        elseif($page->prev) echo Html::link("$url/$page->prev/", 'Anterior', 'title="Ir a la pág. anterior" class="nextprev" rel="prev"') ?>
+    <?php
+    // 前のページへのリンク
+    // ページ1の場合はページ番号なしURLでリンクする
+    if ($page->prev == 1) {
+        echo Html::link(
+            "$url/",
+            '前へ',
+            'title="前のページへ移動" class="nextprev" rel="prev"'
+        );
+    } elseif ($page->prev) {
+        echo Html::link(
+            "$url/$page->prev/",
+            '前へ',
+            'title="前のページへ移動" class="nextprev" rel="prev"'
+        );
+    }
+    ?>
 
-    pag. <?= $page->current ?> de <?= $page->total ?>
+    ページ <?= $page->current ?> / <?= $page->total ?>
     |
-    items <?= $s_item ?>-<?= $e_item ?>
+    アイテム <?= $s_item ?>–<?= $e_item ?>
 
-    <?php if($page->next) echo Html::link("$url/$page->next/", 'Siguiente', 'title="Ir a la pág. siguiente" class="nextprev" rel="next"') ?>
+    <?php
+    // 次のページへのリンク
+    if ($page->next) {
+        echo Html::link(
+            "$url/$page->next/",
+            '次へ',
+            'title="次のページへ移動" class="nextprev" rel="next"'
+        );
+    }
+    ?>
 </div>

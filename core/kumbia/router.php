@@ -154,7 +154,7 @@ class Router
                     $num_params > $reflectionMethod->getNumberOfParameters()) {
 
                     // パラメータ数エラー（メッセージはビュー側で処理）
-                    throw new KumbiaException('', 'num_params');   
+                    throw new KumbiaException('', 'num_params');
                 }
             }
         }

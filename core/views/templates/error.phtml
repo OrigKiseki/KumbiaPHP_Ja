@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-	<meta charset=utf-8 >
-	<title>KumbiaPHP Framework</title>
-	<link rel="stylesheet" href="<?= PUBLIC_PATH ?>css/style.css" >
+    <!-- 文字コードの指定 -->
+    <meta charset="utf-8">
+    <!-- ページタイトル -->
+    <title>KumbiaPHP フレームワーク</title>
+    <!-- 共通スタイルシートの読み込み -->
+    <link rel="stylesheet" href="<?= PUBLIC_PATH ?>css/style.css">
 </head>
 <body>
-	<?= $content ?>
+    <?php
+    // コントローラー／ビュー側でセットされたコンテンツをここに描画
+    echo $content;
+    ?>
 </body>
 </html>

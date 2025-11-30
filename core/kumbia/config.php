@@ -15,7 +15,7 @@
 
 /**
  * 設定ファイル読み込み用クラス
- * 
+ *
  * シングルトンに近い形で、読み込んだ設定を
  * 配列にキャッシュして再利用します。
  * 同じ設定ファイルを runtime 中に何度も読み込まないことで、
@@ -114,7 +114,7 @@ class Config
      * （パフォーマンスの観点から .php の使用が推奨されます）
      *
      * @param string $file ファイル名（拡張子なし）
-     * 
+     *
      * @return array<array-key,mixed>
      */
     private static function load($file): array

@@ -3,10 +3,11 @@
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載された
+ * New BSD ライセンスの条件に従います。
  *
- * Plugin para jQuery que incluye los callbacks basicos para los Helpers
+ * jQuery 用プラグイン
+ * （ヘルパー向けの基本的なコールバック群を提供）
  *
  * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
@@ -14,26 +15,26 @@
 
 (function ($) {
 	/**
-	 * Objeto Kumbia
+	 * Kumbia オブジェクト
 	 *
 	 */
 	$.Kumbia = {
 		/**
-		 * Ruta al directorio public en el servidor
+		 * サーバ上の public ディレクトリへのパス
 		 *
 		 * @var String
 		 */
 		publicPath: null,
 
 		/**
-		 * Plugins cargados
+		 * 読み込まれたプラグイン
 		 *
 		 * @var Array
 		 */
 		plugin: [],
 
 		/**
-		 * Muestra mensaje de confirmacion
+		 * 確認ダイアログを表示する
 		 *
 		 * @param Object event
 		 */
@@ -45,9 +46,9 @@
 		},
 
 		/**
-		 * Aplica un efecto a un elemento
+		 * 要素にエフェクトを適用する
 		 *
-		 * @param String fx
+		 * @param String fx エフェクト名
 		 */
 		cFx: function (fx) {
 			return function (event) {
@@ -59,7 +60,7 @@
 		},
 
 		/**
-		 * Carga con AJAX
+		 * AJAX でコンテンツを読み込む
 		 *
 		 * @param Object event
 		 */
@@ -73,7 +74,7 @@
 		},
 
 		/**
-		 * Carga con AJAX y Confirmacion
+		 * 確認付きで AJAX 読み込みを行う
 		 *
 		 * @param Object event
 		 */
@@ -89,8 +90,8 @@
 		},
 
 		/**
-		 * Enviar formularios de manera asincronica, via POST
-		 * Y los carga en un contenedor
+		 * フォームを非同期（POST）で送信し、
+		 * 結果を指定コンテナに表示する
 		 */
 		cFRemote: function (event) {
 			event.preventDefault();
@@ -109,7 +110,7 @@
 		},
 
 		/**
-		 * Carga con AJAX al cambiar select
+		 * select 変更時に AJAX でリストを更新する
 		 *
 		 * @param Object event
 		 */
@@ -132,52 +133,52 @@
 		},
 
 		/**
-		 * Enlaza a los métodos por defecto
+		 * デフォルトメソッドにイベントをバインドする
 		 *
 		 */
 		bind: function () {
-			// Enlace y boton con confirmacion
+			// 確認ダイアログ付きリンク・ボタン
 			$("body").on("click", "a.js-confirm, input.js-confirm", this.cConfirm);
 
-			// Enlace ajax
+			// AJAX リンク
 			$("body").on("click", "a.js-remote", this.cRemote);
 
-			// Enlace ajax con confirmacion
+			// 確認付き AJAX リンク
 			$("body").on("click", "a.js-remote-confirm", this.cRemoteConfirm);
 
-			// Efecto show
+			// show エフェクト
 			$("body").on("click", ".js-show", this.cFx("show"));
 
-			// Efecto hide
+			// hide エフェクト
 			$("body").on("click", ".js-hide", this.cFx("hide"));
 
-			// Efecto toggle
+			// toggle エフェクト
 			$("body").on("click", ".js-toggle", this.cFx("toggle"));
 
-			// Efecto fadeIn  @deprecated use CSS
+			// fadeIn エフェクト（非推奨: CSS を推奨）
 			$("body").on("click", ".js-fade-in", this.cFx("fadeIn"));
 
-			// Efecto fadeOut @deprecated use CSS
+			// fadeOut エフェクト（非推奨: CSS を推奨）
 			$("body").on("click", ".js-fade-out", this.cFx("fadeOut"));
 
-			// Formulario ajax
+			// AJAX フォーム
 			$("body").on("submit", "form.js-remote", this.cFRemote);
 
-			// Lista desplegable que actualiza con ajax
+			// AJAX で更新されるセレクトボックス
 			$("body").on("change", "select.js-remote", this.cUpdaterSelect);
 
-			// Enlazar DatePicker
+			// DatePicker をバインド
 			$.Kumbia.bindDatePicker();
 		},
 
 		/**
-		 * Implementa la autocarga de plugins, estos deben seguir
-		 * una convención para que pueda funcionar correctamente
+		 * プラグインのオートロードを行う
+		 * jp- クラス名の命名規則に従って自動的に読み込む
 		 */
 		autoload: function () {
 			let elem = $("[class*='jp-']");
 			$.each(elem, function (i) {
-				let el = $(this); //apunta al elemento con clase jp-*
+				let el = $(this); // jp-* クラスを持つ要素
 				let classes = el.attr("class").split(" ");
 				for (i in classes) {
 					if (classes[i].substr(0, 3) == "jp-") {
@@ -208,47 +209,47 @@
 		},
 
 		/**
-		 * Carga y Enlaza Unobstrusive DatePicker en caso de ser necesario
+		 * 必要に応じて Unobtrusive DatePicker を読み込み・バインドする
 		 *
 		 */
 		bindDatePicker: function () {
-			// Selecciona los campos input
+			// 対象となる input 要素を取得
 			let inputs = $("input.js-datepicker");
 			/**
-			 * Funcion encargada de enlazar el DatePicker a los Input
+			 * DatePicker を各 input にバインドする関数
 			 *
 			 */
 			let bindInputs = function () {
 				inputs.each(function () {
 					let opts = { monthSelector: true, yearSelector: true };
 					let input = $(this);
-					// Verifica si hay mínimo
+					// 最小日付が指定されているかチェック
 					if (input.attr("min") != undefined) {
 						opts.dateMin = input.attr("min").split("-");
 					}
-					// Verifica si ha máximo
+					// 最大日付が指定されているかチェック
 					if (input.attr("max") != undefined) {
 						opts.dateMax = input.attr("max").split("-");
 					}
 
-					// Crea el calendario
+					// カレンダーを作成
 					input.pickadate(opts);
 				});
 			};
 
-			// Si ya esta cargado Unobstrusive DatePicker, lo integra de una vez
+			// すでに Unobtrusive DatePicker が読み込まれている場合は即時バインド
 			if (typeof $.pickadate != undefined) {
 				return bindInputs();
 			}
 
-			// Carga la hoja de estilos
+			// スタイルシートを読み込む
 			$("head").append(
 				'<link href="' +
 				this.publicPath +
 				'css/pickadate.css" rel="stylesheet">'
 			);
 
-			// Carga Unobstrusive DatePicker, para poder usar cache
+			// Unobtrusive DatePicker を読み込み（キャッシュ利用可）
 			jQuery
 				.ajax({
 					dataType: 'script',
@@ -261,15 +262,15 @@
 		},
 
 		/**
-		 * Inicializa el plugin
+		 * プラグインを初期化する
 		 *
 		 */
 		initialize: function () {
-			// Obtiene el publicPath
+			// publicPath を取得
 			let src = document.currentScript.src;
 			this.publicPath = src.slice(0, src.lastIndexOf('javascript/'));
 
-			// Enlaza a los métodos por defecto
+			// デフォルトメソッドをバインドし、プラグインを自動ロード
 			$(function () {
 				$.Kumbia.bind();
 				$.Kumbia.autoload();
@@ -277,6 +278,6 @@
 		},
 	};
 
-	// Inicializa el plugin
+	// プラグインを初期化
 	$.Kumbia.initialize();
 })(jQuery);

@@ -4,13 +4,13 @@
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載された
+ * New BSD ライセンスの条件に従います。
  *
- * @category   Kumbia
- * @package    Acl
+ * @category   Kumbia        フレームワーク本体
+ * @package    Acl           アクセス制御 (ACL)
  *
- * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
+ * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
 /**
@@ -24,85 +24,89 @@ include __DIR__ .'/role/role.php';
 include __DIR__ .'/resource/resource.php';
 
 /**
- * Listas ACL (Access Control List)
+ * ACL（Access Control List / アクセス制御リスト）
  *
- * La Lista de Control de Acceso o ACLs (del ingles, Access Control List)
- * es un concepto de seguridad informatica usado para fomentar la separacion
- * de privilegios. Es una forma de determinar los permisos de acceso apropiados
- * a un determinado objeto, dependiendo de ciertos aspectos del proceso
- * que hace el pedido.
+ * ACL（Access Control List）は、権限分離を実現するために使われる
+ * セキュリティの概念であり、どのオブジェクトに対してどのような
+ * アクセス権限を与えるかを定義します。
  *
- * Cada lista ACL contiene una lista de Roles, unos resources y unas acciones de
- * acceso;
+ * 各 ACL には、ロール（Roles）、リソース（Resources）、および
+ * それらに対するアクセス権（Actions）が含まれます。
  *
- * $roles = Lista de Objetos Acl_Role de Roles de la Lista
- * $resources = Lista de Objetos Acl_Resource que van a ser controlados
- * $access = Contiene la lista de acceso
- * $role_inherits = Contiene la lista de roles que son heradados por otros
- * $resource_names = Nombres de Resources
- * $roles_names = Nombres de Resources
+ * $roles          = AclRole オブジェクトの一覧（ロールのリスト）
+ * $resources      = AclResource オブジェクトの一覧（制御対象リソース）
+ * $access         = アクセス権限の一覧
+ * $role_inherits  = 他ロールから継承しているロールの一覧
+ * $resource_names = リソース名の一覧
+ * $roles_names    = ロール名の一覧
  *
  * @category   Kumbia
  * @package    Acl
- * @deprecated 1.0 use ACL2
+ * @deprecated 1.0 以降は ACL2 の使用を推奨
  */
 class Acl {
 
     /**
-     * Nombres de Roles en la lista ACL
+     * ACL に登録されているロール名の一覧
      *
      * @var array
      */
     private $roles_names = array();
+
     /**
-     * Objetos Roles en lista ACL
+     * ACL に登録されているロールオブジェクトの一覧
      *
      * @var array
      */
     private $roles = array();
+
     /**
-     * Objetos Resources en la lista ACL
+     * ACL に登録されているリソースオブジェクトの一覧
      *
      * @var array
      */
     private $resources = array();
+
     /**
-     * Permisos de la Lista de Acceso
+     * アクセス権限テーブル
      *
      * @var array
      */
     public $access = array();
+
     /**
-     * Herencia entre Roles
+     * ロール同士の継承関係
      *
      * @var array
      */
     private $role_inherits = array();
+
     /**
-     * Array de Nombres de Recursos
+     * リソース名の一覧
      *
      * @var array
      */
     private $resources_names = array('*');
+
     /**
-     * Lista ACL de permisos
+     * リソースごとのアクセス種別リスト
      *
      * @var array
      */
     private $access_list = array('*' => array('*'));
 
     /**
-     * Agrega un Rol a la Lista ACL
+     * ロールを ACL に追加する
      *
-     * $roleObject = Objeto de la clase AclRole para agregar a la lista
-     * $access_inherits = Nombre del Role del cual hereda permisos ó array del grupo
-     * de perfiles del cual hereda permisos
+     * $roleObject      = 追加する AclRole オブジェクト
+     * $access_inherits = 権限を継承するロール名、またはその配列
      *
-     * Ej:
+     * 例:
      * <code>$acl->add_role(new Acl_Role('administrador'), 'consultor');</code>
      *
-     * @param AclRole $roleObject
-     * @return false|null
+     * @param AclRole    $roleObject
+     * @param string|array $access_inherits 継承元ロール
+     * @return false|null 既に存在する場合は false
      */
     public function add_role(AclRole $roleObject, $access_inherits = '') {
         if (in_array($roleObject->name, $this->roles_names)) {
@@ -110,6 +114,7 @@ class Acl {
         }
         $this->roles[]                             = $roleObject;
         $this->roles_names[]                       = $roleObject->name;
+        // すべてのリソース・すべてのアクセスに対して許可（デフォルト）
         $this->access[$roleObject->name]['*']['*'] = 'A';
         if ($access_inherits) {
             $this->add_inherit($roleObject->name, $access_inherits);
@@ -117,10 +122,11 @@ class Acl {
     }
 
     /**
-     * Hace que un rol herede los accesos de otro rol
+     * ロールに、別のロールからアクセス権を継承させる
      *
-     * @param string $role
-     * @param string $role_to_inherit
+     * @param string       $role           継承先ロール名
+     * @param string|array $role_to_inherit 継承元ロール名、または配列
+     * @return bool|void
      */
     public function add_inherit($role, $role_to_inherit) {
         if (!in_array($role, $this->roles_names)) {
@@ -133,7 +139,7 @@ class Acl {
                         return false;
                     }
                     if (!in_array($rol_in, $this->roles_names)) {
-                        throw new KumbiaException("El Rol '{$rol_in}' no existe en la lista");
+                        throw new KumbiaException("ロール '{$rol_in}' は ACL リスト内に存在しません");
 
                     }
                     $this->role_inherits[$role][] = $rol_in;
@@ -144,21 +150,20 @@ class Acl {
                     return false;
                 }
                 if (!in_array($role_to_inherit, $this->roles_names)) {
-                    throw new KumbiaException("El Rol '{$role_to_inherit}' no existe en la lista");
+                    throw new KumbiaException("ロール '{$role_to_inherit}' は ACL リスト内に存在しません");
 
                 }
                 $this->role_inherits[$role][] = $role_to_inherit;
                 $this->rebuild_access_list();
             }
         } else {
-            throw new KumbiaException("Debe especificar un rol a heredar en Acl::add_inherit");
+            throw new KumbiaException("Acl::add_inherit では継承元ロールを指定する必要があります");
 
         }
     }
 
     /**
-     *
-     * Verifica si un rol existe en la lista o no
+     * 指定したロールが ACL 内に存在するかどうかを確認する
      *
      * @param string $role_name
      * @return boolean
@@ -168,8 +173,7 @@ class Acl {
     }
 
     /**
-     *
-     * Verifica si un resource existe en la lista o no
+     * 指定したリソースが ACL 内に存在するかどうかを確認する
      *
      * @param string $resource_name
      * @return boolean
@@ -179,17 +183,18 @@ class Acl {
     }
 
     /**
-     * Agrega un resource a la Lista ACL
+     * リソースを ACL に追加する
      *
-     * Resource_name puede ser el nombre de un objeto concreto, por ejemplo
-     * consulta, buscar, insertar, valida etc o una lista de ellos
+     * resource_name は、たとえば
+     * consulta（閲覧）、buscar（検索）、insertar（追加）、valida（検証）
+     * などの具体的な操作を表す名前、あるいはそのリストを受け取ります。
      *
-     * Ej:
+     * 例:
      * <code>
-     * //Agregar un resource a la lista:
+     * // 単一のリソースにアクセスを追加
      * $acl->add_resource(new AclResource('clientes'), 'consulta');
      *
-     * //Agregar Varios resources a la lista:
+     * // 複数のアクセス種別を追加
      * $acl->add_resource(new AclResource('clientes'), 'consulta', 'buscar', 'insertar');
      * </code>
      *
@@ -210,10 +215,10 @@ class Acl {
     }
 
     /**
-     * Agrega accesos a un Resource
+     * リソースにアクセス種別を追加する
      *
-     * @param string $resource
-     * @param $access_list
+     * @param string       $resource    リソース名
+     * @param string|array $access_list アクセス種別（文字列または配列）
      */
     public function add_resource_access($resource, $access_list) {
         if (is_array($access_list)) {
@@ -230,10 +235,10 @@ class Acl {
     }
 
     /**
-     * Elimina un acceso del resorce
+     * リソースからアクセス種別を削除する
      *
-     * @param string $resource
-     * @param mixed $access_list
+     * @param string       $resource
+     * @param string|array $access_list
      */
     public function drop_resource_access($resource, $access_list) {
         if (is_array($access_list)) {
@@ -259,42 +264,42 @@ class Acl {
     }
 
     /**
-     * Agrega un acceso de la lista de resources a un rol
+     * 特定ロールに対し、リソースへのアクセスを許可する
      *
-     * Utilizar '*' como comodín
+     * ワイルドカードとして '*' を使用可能。
      *
-     * Ej:
+     * 例:
      * <code>
-     * //Acceso para invitados a consultar en clientes
+     * // invitados ロールに、clientes リソースの consulta アクセスを許可
      * $acl->allow('invitados', 'clientes', 'consulta');
      *
-     * //Acceso para invitados a consultar e insertar en clientes
+     * // invitados ロールに、clientes リソースの consulta / insertar アクセスを許可
      * $acl->allow('invitados', 'clientes', array('consulta', 'insertar'));
      *
-     * //Acceso para cualquiera a visualizar en productos
+     * // すべてのロールに、productos リソースの visualiza アクセスを許可
      * $acl->allow('*', 'productos', 'visualiza');
      *
-     * //Acceso para cualquiera a visualizar en cualquier resource
+     * // すべてのロールに、すべてのリソースで visualiza アクセスを許可
      * $acl->allow('*', '*', 'visualiza');
      * </code>
      *
-     * @param string $role
-     * @param string $resource
-     * @param mixed $access
+     * @param string       $role
+     * @param string       $resource
+     * @param string|array $access
      */
     public function allow($role, $resource, $access) {
         if (!in_array($role, $this->roles_names)) {
-            throw new KumbiaException("No existe el rol '$role' en la lista");
+            throw new KumbiaException("ロール '$role' は ACL リスト内に存在しません");
 
         }
         if (!in_array($resource, $this->resources_names)) {
-            throw new KumbiaException("No existe el resource '$resource' en la lista");
+            throw new KumbiaException("リソース '$resource' は ACL リスト内に存在しません");
 
         }
         if (is_array($access)) {
             foreach ($access as $acc) {
                 if (!in_array($acc, $this->access_list[$resource])) {
-                    throw new KumbiaException("No existe el acceso '$acc' en el resource '$resource' de la lista");
+                    throw new KumbiaException("アクセス '$acc' はリソース '$resource' の ACL リスト内に存在しません");
 
                 }
             }
@@ -303,7 +308,7 @@ class Acl {
             }
         } else {
             if (!in_array($access, $this->access_list[$resource])) {
-                throw new KumbiaException("No existe el acceso '$access' en el resource '$resource' de la lista");
+                throw new KumbiaException("アクセス '$access' はリソース '$resource' の ACL リスト内に存在しません");
 
             }
             $this->access[$role][$resource][$access] = 'A';
@@ -312,42 +317,42 @@ class Acl {
     }
 
     /**
-     * Denegar un acceso de la lista de resources a un rol
+     * 特定ロールに対し、リソースへのアクセスを拒否する
      *
-     * Utilizar '*' como comodín
+     * ワイルドカードとして '*' を使用可能。
      *
-     * Ej:
+     * 例:
      * <code>
-     * //Denega acceso para invitados a consultar en clientes
+     * // invitados ロールの clientes リソースに対する consulta アクセスを拒否
      * $acl->deny('invitados', 'clientes', 'consulta');
      *
-     * //Denega acceso para invitados a consultar e insertar en clientes
+     * // invitados ロールの clientes リソースに対する consulta / insertar を拒否
      * $acl->deny('invitados', 'clientes', array('consulta', 'insertar'));
      *
-     * //Denega acceso para cualquiera a visualizar en productos
+     * // すべてのロールで productos リソースの visualiza アクセスを拒否
      * $acl->deny('*', 'productos', 'visualiza');
      *
-     * //Denega acceso para cualquiera a visualizar en cualquier resource
+     * // すべてのロールで、すべてのリソースの visualiza アクセスを拒否
      * $acl->deny('*', '*', 'visualiza');
      * </code>
      *
-     * @param string $role
-     * @param string $resource
-     * @param mixed $access
+     * @param string       $role
+     * @param string       $resource
+     * @param string|array $access
      */
     public function deny($role, $resource, $access) {
         if (!in_array($role, $this->roles_names)) {
-            throw new KumbiaException("No existe el rol '$role' en la lista");
+            throw new KumbiaException("ロール '$role' は ACL リスト内に存在しません");
 
         }
         if (!in_array($resource, $this->resources_names)) {
-            throw new KumbiaException("No existe el resource '$resource' en la lista");
+            throw new KumbiaException("リソース '$resource' は ACL リスト内に存在しません");
 
         }
         if (is_array($access)) {
             foreach ($access as $acc) {
                 if (!in_array($acc, $this->access_list[$resource])) {
-                    throw new KumbiaException("No existe el acceso '$acc' en el resource '$resource' de la lista");
+                    throw new KumbiaException("アクセス '$acc' はリソース '$resource' の ACL リスト内に存在しません");
 
                 }
             }
@@ -356,7 +361,7 @@ class Acl {
             }
         } else {
             if (!in_array($access, $this->access_list[$resource])) {
-                throw new KumbiaException("No existe el acceso '$access' en el resource '$resource' de la lista");
+                throw new KumbiaException("アクセス '$access' はリソース '$resource' の ACL リスト内に存在しません");
 
             }
             $this->access[$role][$resource][$access] = 'D';
@@ -365,43 +370,41 @@ class Acl {
     }
 
     /**
-     * Devuelve true si un $role, tiene acceso en un resource
+     * 指定されたロールが、リソースに対してアクセス権を持つかどうかを返す
      *
+     * 例:
      * <code>
-     * //Andres tiene acceso a insertar en el resource productos
+     * // andres は productos リソースに対して insertar できるか？
      * $acl->is_allowed('andres', 'productos', 'insertar');
      *
-     * //Invitado tiene acceso a editar en cualquier resource?
-     * $acl->is_allowed('invitado', '*', 'editar');
-     *
-     * //Invitado tiene acceso a editar en cualquier resource?
+     * // invitado は任意のリソースに対して editar できるか？
      * $acl->is_allowed('invitado', '*', 'editar');
      * </code>
      *
-     * @param string $role
-     * @param string $resource
-     * @param mixed $access_list
+     * @param string       $role
+     * @param string       $resource
+     * @param string|array $access_list
      * @return boolean|null
      */
     public function is_allowed($role, $resource, $access_list) {
         if (!in_array($role, $this->roles_names)) {
-            throw new KumbiaException("El rol '$role' no existe en la lista en acl::is_allowed");
+            throw new KumbiaException("ロール '$role' は ACL リスト内に存在しません（Acl::is_allowed）");
 
         }
         if (!in_array($resource, $this->resources_names)) {
-            throw new KumbiaException("El resource '$resource' no existe en la lista en acl::is_allowed");
+            throw new KumbiaException("リソース '$resource' は ACL リスト内に存在しません（Acl::is_allowed）");
 
         }
         if (is_array($access_list)) {
             foreach ($access_list as $access) {
                 if (!in_array($access, $this->access_list[$resource])) {
-                    throw new KumbiaException("No existe en acceso '$access' en el resource '$resource' en acl::is_allowed");
+                    throw new KumbiaException("アクセス '$access' はリソース '$resource' の ACL リスト内に存在しません（Acl::is_allowed）");
 
                 }
             }
         } else {
             if (!in_array($access_list, $this->access_list[$resource])) {
-                throw new KumbiaException("No existe en acceso '$access_list' en el resource '$resource' en acl::is_allowed");
+                throw new KumbiaException("アクセス '$access_list' はリソース '$resource' の ACL リスト内に存在しません（Acl::is_allowed）");
 
             }
         }
@@ -409,7 +412,7 @@ class Acl {
         /* foreach($this->access[$role] as ){
 
         } */
-        // FIXME: Por lo pronto hacemos esta validación, luego se mejorará
+        // FIXME: 現時点では簡易な判定のみ。今後改善予定。
         if (!isset($this->access[$role][$resource][$access_list])) {
             return false;
         }
@@ -420,8 +423,8 @@ class Acl {
     }
 
     /**
-     * Reconstruye la lista de accesos a partir de las herencias
-     * y accesos permitidos y denegados
+     * ロール継承および許可／拒否設定から
+     * アクセスリストを再構築する
      *
      * @access private
      */
@@ -432,7 +435,7 @@ class Acl {
                     foreach ($this->role_inherits[$role] as $role_inherit) {
                         if (isset($this->access[$role_inherit])) {
                             foreach ($this->access[$role_inherit] as $resource_name => $access) {
-                                foreach ($access as $access_name                       => $value) {
+                                foreach ($access as $access_name => $value) {
                                     if (!in_array($access_name, $this->access_list[$resource_name])) {
                                         unset($this->access[$role_inherit][$resource_name][$access_name]);
                                     } else {

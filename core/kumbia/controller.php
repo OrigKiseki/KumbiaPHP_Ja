@@ -157,7 +157,7 @@ abstract class Controller
      * @param string $name      呼び出されたメソッド名
      * @param array  $arguments 渡された引数
      * @throws KumbiaException  対応するアクションが存在しない場合にスロー
-     * 
+     *
      * @return void
      */
     public function __call($name, $arguments)

@@ -4,18 +4,18 @@
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載された
+ * New BSD ライセンスの条件に従います。
  *
  * @category   Kumbia
- * @package    Acl
+ * @package    Acl    アクセス制御 (ACL)
  *
- * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
+ * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
 
 /**
- * Implementacion de ACL con definicion de reglas en PHP
+ * PHP によるルール定義を行う ACL 実装
  *
  * @category   Kumbia
  * @package    Acl
@@ -24,7 +24,8 @@ class SimpleAcl extends Acl2
 {
 
     /**
-     * Definicion de Roles con sus respectivos padres y recursos a los que pueden acceder
+     * ロールの定義
+     * それぞれのロールに対して「親ロール」と「アクセス可能なリソース」を紐付ける
      *
      * @var array
      *
@@ -40,8 +41,9 @@ class SimpleAcl extends Acl2
      *   );
      */
     protected $_roles = array();
+
     /**
-     * Usuarios del sistema con sus respectivos roles
+     * システムユーザーと、それぞれに割り当てられているロール
      *
      * @var array
      *
@@ -54,10 +56,10 @@ class SimpleAcl extends Acl2
     protected $_users = array();
 
     /**
-     * Establece los recursos a los que el rol puede acceder
+     * 指定したロールに、アクセス可能なリソースを設定する
      *
-     * @param string $role nombre de rol
-     * @param array $resources recursos a los que puede acceder el rol
+     * @param string $role      ロール名
+     * @param array  $resources ロールがアクセスできるリソースの配列
      */
     public function allow($role, $resources)
     {
@@ -65,10 +67,10 @@ class SimpleAcl extends Acl2
     }
 
     /**
-     * Establece los padres del rol
+     * 指定したロールの「親ロール」を設定する
      *
-     * @param string $role nombre de rol
-     * @param array $parents padres del rol
+     * @param string $role    ロール名
+     * @param array  $parents 親ロール名の配列
      */
     public function parents($role, $parents)
     {
@@ -76,10 +78,10 @@ class SimpleAcl extends Acl2
     }
 
     /**
-     * Adiciona un usuario a la lista con sus respectivos roles
+     * ユーザーと、そのユーザーに紐付くロールを登録する
      *
-     * @param string $user
-     * @param array $roles
+     * @param string $user  ユーザー名
+     * @param array  $roles 付与するロールの配列
      */
     public function user($user, $roles)
     {
@@ -87,10 +89,10 @@ class SimpleAcl extends Acl2
     }
 
     /**
-     * Obtiene los roles del usuario al que se le valida si puede acceder al recurso
+     * アクセス検証対象ユーザーに紐付くロールを取得する
      *
-     * @param string $user usuario al que se le valida acceso
-     * @return array roles de usuario
+     * @param  string $user アクセス検証を行うユーザー
+     * @return array  そのユーザーに割り当てられているロール一覧
      */
     protected function _getUserRoles($user)
     {
@@ -102,10 +104,10 @@ class SimpleAcl extends Acl2
     }
 
     /**
-     * Obtiene los recursos al cual el rol puede acceder
+     * 指定したロールがアクセスできるリソース一覧を取得する
      *
-     * @param string $role nombre de rol
-     * @return array recursos al cual el rol puede acceder
+     * @param  string $role ロール名
+     * @return array  ロールがアクセス可能なリソースの配列
      */
     protected function _getRoleResources($role)
     {
@@ -117,10 +119,10 @@ class SimpleAcl extends Acl2
     }
 
     /**
-     * Obtiene los padres del rol
+     * 指定したロールの親ロール一覧を取得する
      *
-     * @param string $role nombre de rol
-     * @return array padres del rol
+     * @param  string $role ロール名
+     * @return array  親ロール名の配列
      */
     protected function _getRoleParents($role)
     {

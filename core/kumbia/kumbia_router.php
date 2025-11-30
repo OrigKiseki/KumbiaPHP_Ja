@@ -102,11 +102,11 @@ class KumbiaRouter
 
     /**
      * コントローラファイルを読み込み、インスタンスを生成して返す
-     * 
+     *
      * @param array $params ルーターで解析されたパラメータ
-     * 
+     *
      * @throws KumbiaException コントローラが存在しない場合
-     * 
+     *
      * @return Controller
      */
     public static function getController(array $params): Controller

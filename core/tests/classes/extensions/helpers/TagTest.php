@@ -4,23 +4,29 @@
  *
  * LICENSE
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * このソースファイルは、同梱されている LICENSE ファイルに記載された
+ * New BSD ライセンスの条件に従います。
  *
- * @category   Test
- * @package    Tag
+ * @category   Test        テスト
+ * @package    Tag         Tag ヘルパー
  *
- * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
+ * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team
  * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
  */
 
 /**
- * 
+ * Tag クラスのテスト
+ *
  * @category   Test
- * @package    Tag 
+ * @package    Tag
  */
 class TagTest extends PHPUnit\Framework\TestCase
 {
+    /**
+     * Tag::js() 用のデータプロバイダ
+     *
+     * @return array
+     */
     public function jsFileProvider()
     {
         return array(
@@ -32,6 +38,7 @@ class TagTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider jsFileProvider
+     * Tag::js() が正しい <script> タグを生成するかを検証
      */
     public function testJs($file)
     {
@@ -44,6 +51,7 @@ class TagTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider jsFileProvider
+     * nocache パラメータ付きの Tag::js() を検証
      */
     public function testJsNoCache($file)
     {
@@ -52,10 +60,15 @@ class TagTest extends PHPUnit\Framework\TestCase
         $response = Tag::js($file, false);
         $expected = sprintf($scriptPattern, PUBLIC_PATH, $file.'.js');
 
+        // 先頭は nocache 付きの URL で始まっているか
         $this->assertStringStartsWith($expected, $response);
+        // 閉じタグで終わっているか
         $this->assertStringEndsWith('"></script>', $response);
     }
 
+    /**
+     * 配列で属性を渡したときの Tag::getAttrs() を検証
+     */
     public function testGetAttrsPassingArray()
     {
         $response = Tag::getAttrs(array(
@@ -67,6 +80,9 @@ class TagTest extends PHPUnit\Framework\TestCase
         $this->assertSame($expected, $response);
     }
 
+    /**
+     * 文字列で属性を渡したときの Tag::getAttrs() を検証
+     */
     public function testGetAttrsPassingString()
     {
         $expected = 'attr-one="value-one" attr-two="value-two"';
@@ -75,6 +91,9 @@ class TagTest extends PHPUnit\Framework\TestCase
         $this->assertSame($expected, $response);
     }
 
+    /**
+     * CSS ファイルの追加と取得処理を検証
+     */
     public function testAddAndGetCssFiles()
     {
         $this->assertEmpty(Tag::getCss());
@@ -91,6 +110,11 @@ class TagTest extends PHPUnit\Framework\TestCase
         $this->assertInternalCssValue('css3', 'screen', $files[2]);
     }
 
+    /**
+     * Tag::create() のテスト用データプロバイダ
+     *
+     * @return array
+     */
     public function createTagDataProvider()
     {
         return array(
@@ -123,6 +147,7 @@ class TagTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider createTagDataProvider
+     * Tag::create() の出力 HTML を検証
      */
     public function testCreateWithoutContent($tag, $attrs, $content, $expectedResult)
     {
@@ -134,9 +159,11 @@ class TagTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $file
-     * @param $media
-     * @param $data
+     * CSS 情報の配列が正しい値を持っているか検証するヘルパー
+     *
+     * @param string $file  期待される src
+     * @param string $media 期待される media
+     * @param array  $data  実際の CSS 情報配列
      */
     private function assertInternalCssValue($file, $media, $data)
     {

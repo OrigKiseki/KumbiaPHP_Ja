@@ -1,51 +1,88 @@
 <div class="flash error">
-	<h1>Número de Parámetros Incorrecto</h1>
-	<p><strong>Error: </strong>Número de parámetros erróneo para ejecutar la acción <strong><?= $action?></strong> en el controlador <strong><?= $Controller?></strong>
+    <?php // エラー表示：アクションに渡されたパラメータ数が正しくない場合 ?>
+    <h1>パラメータ数が正しくありません</h1>
+    <p>
+        <strong>エラー: </strong>
+        コントローラー <strong><?= $Controller ?></strong> のアクション
+        <strong><?= $action ?></strong> を実行するためのパラメータ数が誤っています。
+    </p>
 </div>
+
 <div class="flash info">
-	<p><strong>Información: </strong>Se está intentando llamar a : <em class="file"><?= $controller , '->', $action , '("', implode('","', $parameters) , '");' ?></em> pero el método no está recibiendo la cantidad de parámetros correcta.
+    <?php // 情報表示：実際に呼び出そうとしているメソッドシグネチャを表示 ?>
+    <p>
+        <strong>情報: </strong>
+        次のように呼び出そうとしています：<br>
+        <em class="file">
+            <?= $controller , '->', $action , '("', implode('","', $parameters) , '");' ?>
+        </em><br>
+        しかし、このメソッドが受け取るパラメータ数と一致していません。
+    </p>
 </div>
+
 <div class="flash valid">
-	<h1>Soluciones</h1>
-	<ul>
-		<li>
-	Envie el número de parámetros correcto en la url de la petición.
-		</li>
-		<li>
-	Cree los parámetros correctos en la acción <em><?= $action ?></em> del controlador : <strong><?= $Controller ?>Controller</strong>
+    <?php // 解決策の候補を列挙 ?>
+    <h1>解決方法</h1>
+    <ul>
+        <li>
+            リクエストURLに、正しい数のパラメータを送信してください。
+        </li>
+
+        <li>
+            コントローラー <strong><?= $Controller ?>Controller</strong> の
+            アクション <em><?= $action ?></em> の引数定義を、
+            必要なパラメータ数に合わせてください。
 <pre>
-<?php highlight_string("<?php
+<?php
+// パラメータを明示的に定義する例
+highlight_string("<?php
 class {$Controller} extends AppController
 {
     public function {$action}( \$param1, \$param2, ... , \$paramN)
-    {    
-    
-    }	
-}") ?>
+    {
+        // ここに処理を実装してください
+    }
+}
+");
+?>
 </pre>
-		</li>
-		<li>
-	Establesca valores por defecto a los parámetros que no siempre recibirán un valor por la url en la acción <em class="file"><?= $action ?></em> del controlador : <strong><?= $Controller ?>Controller</strong>
+        </li>
+
+        <li>
+            URL から常に値が渡されるとは限らないパラメータには、
+            コントローラー <strong><?= $Controller ?>Controller</strong> の
+            アクション <em class="file"><?= $action ?></em> 内でデフォルト値を設定してください。
 <pre>
-<?php highlight_string("<?php
+<?php
+// デフォルト値を設定する例
+highlight_string("<?php
 class {$Controller} extends AppController
 {
-    public function {$action}( \$param1 , \$param2 = NULL , \$param3 = 'Valor por Defecto')
-    {    
-    
-    }	
-}") ?>
+    public function {$action}( \$param1 , \$param2 = NULL , \$param3 = 'デフォルト値')
+    {
+        // ここに処理を実装してください
+    }
+}
+");
+?>
 </pre>
-		</li>
-		<li>
-	Establesca el atributo <em>$limit_params</em> en <em>FALSE</em> del controlador : <strong><?= $Controller ?>Controller</strong>
+        </li>
+
+        <li>
+            コントローラー <strong><?= $Controller ?>Controller</strong> で、
+            パラメータ数チェックを無効にするために
+            <em>$limit_params</em> プロパティを <em>FALSE</em> に設定してください。
 <pre>
-<?php highlight_string("<?php
+<?php
+// パラメータ数の制限を無効にする例
+highlight_string("<?php
 class {$Controller} extends AppController
 {
     public \$limit_params = FALSE;
-}") ?>
+}
+");
+?>
 </pre>
-		</li>
+        </li>
     </ul>
 </div>
