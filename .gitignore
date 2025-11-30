@@ -1,4 +1,6 @@
-
+vendor
+default/app/temp
+default/public/temp
 default/public/.user.ini
 
 # Mac filesystem dust
